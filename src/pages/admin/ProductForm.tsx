@@ -23,6 +23,7 @@ export default function ProductForm() {
     description_mk: '',
     description_en: '',
     price: '',
+    sale_price: '',
     category_id: '',
     status: 'draft' as ProductStatus,
     image_url: '',
@@ -42,6 +43,7 @@ export default function ProductForm() {
         description_mk: product.description_mk || '',
         description_en: product.description_en || '',
         price: product.price.toString(),
+        sale_price: product.sale_price?.toString() || '',
         category_id: product.category_id || '',
         status: product.status,
         image_url: product.image_url || '',
@@ -95,6 +97,7 @@ export default function ProductForm() {
       description_mk: formData.description_mk || null,
       description_en: formData.description_en || null,
       price: parseFloat(formData.price) || 0,
+      sale_price: formData.sale_price ? parseFloat(formData.sale_price) : null,
       category_id: formData.category_id || null,
       status: formData.status,
       image_url: imageUrl || null,
@@ -255,6 +258,19 @@ export default function ProductForm() {
             min="0"
             step="1"
             required
+          />
+
+          {/* Sale Price */}
+          <Input
+            id="sale_price"
+            name="sale_price"
+            type="number"
+            label="Sale Price (MKD) - Leave empty if not on sale"
+            value={formData.sale_price}
+            onChange={handleInputChange}
+            placeholder="0"
+            min="0"
+            step="1"
           />
 
           {/* Category */}

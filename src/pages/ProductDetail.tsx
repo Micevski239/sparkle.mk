@@ -1,12 +1,28 @@
+import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { useProduct } from '../hooks/useProducts';
+import { useProduct, useProducts } from '../hooks/useProducts';
 import { formatPrice } from '../lib/utils';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { language, t } = useLanguage();
   const { product, loading, error } = useProduct(id);
+
+  // Fetch related products from the same category
+  const { products: categoryProducts } = useProducts({
+    categoryId: product?.category_id,
+    status: ['published', 'sold'],
+    limit: 5,
+  });
+
+  // Filter out current product and limit to 4
+  const relatedProducts = useMemo(() => {
+    if (!product || !categoryProducts.length) return [];
+    return categoryProducts
+      .filter((p) => p.id !== product.id)
+      .slice(0, 4);
+  }, [product, categoryProducts]);
 
   if (loading) {
     return (
@@ -92,9 +108,19 @@ export default function ProductDetail() {
             </h1>
 
             {/* Price */}
-            <p className={`text-2xl mb-8 ${isSold ? 'text-gray-400' : 'text-gray-900'}`}>
-              {formatPrice(product.price)}
-            </p>
+            <div className={`text-2xl mb-8 ${isSold ? 'text-gray-400' : 'text-gray-900'}`}>
+              {product.sale_price && product.is_on_sale ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-red-500 font-medium">{formatPrice(product.sale_price)}</span>
+                  <span className="line-through text-gray-400 text-xl">{formatPrice(product.price)}</span>
+                  <span className="text-sm bg-red-500 text-white px-2 py-1">
+                    -{Math.round(((product.price - product.sale_price) / product.price) * 100)}%
+                  </span>
+                </div>
+              ) : (
+                formatPrice(product.price)
+              )}
+            </div>
 
             {/* Status */}
             <div className="mb-8">
@@ -139,6 +165,67 @@ export default function ProductDetail() {
             )}
           </div>
         </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-20 pt-12 border-t border-gray-100">
+            <h2 className="text-xl md:text-2xl font-light text-gray-900 mb-8">
+              {language === 'mk' ? 'Слични производи' : 'Related Products'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {relatedProducts.map((relatedProduct) => {
+                const relatedIsSold = relatedProduct.status === 'sold';
+                return (
+                  <Link
+                    key={relatedProduct.id}
+                    to={`/products/${relatedProduct.id}`}
+                    className="group"
+                  >
+                    <div className="aspect-square bg-gray-50 mb-4 overflow-hidden relative">
+                      {relatedProduct.image_url ? (
+                        <img
+                          src={relatedProduct.image_url}
+                          alt={language === 'mk' ? relatedProduct.title_mk : relatedProduct.title_en}
+                          className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
+                            relatedIsSold ? 'opacity-50' : ''
+                          }`}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <svg className="w-12 h-12 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                      {relatedIsSold ? (
+                        <div className="absolute top-3 right-3 bg-gray-900 text-white text-xs px-2 py-1">
+                          {t.products.sold}
+                        </div>
+                      ) : relatedProduct.is_on_sale && relatedProduct.sale_price ? (
+                        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1">
+                          {language === 'mk' ? 'Попуст' : 'Sale'}
+                        </div>
+                      ) : null}
+                    </div>
+                    <h3 className="text-sm text-gray-900 mb-1 group-hover:text-dark-green transition-colors truncate">
+                      {language === 'mk' ? relatedProduct.title_mk : relatedProduct.title_en}
+                    </h3>
+                    <div className={`text-sm ${relatedIsSold ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {relatedProduct.sale_price && relatedProduct.is_on_sale ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-red-500 font-medium">{formatPrice(relatedProduct.sale_price)}</span>
+                          <span className="line-through text-gray-400 text-xs">{formatPrice(relatedProduct.price)}</span>
+                        </div>
+                      ) : (
+                        formatPrice(relatedProduct.price)
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

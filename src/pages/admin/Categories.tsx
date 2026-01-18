@@ -1,9 +1,10 @@
-import { useState, FormEvent } from 'react';
-import { useCategories, useCategoryMutations } from '../../hooks/useCategories';
+import { useState, FormEvent, useMemo } from 'react';
+import { useCategories, useCategoryMutations, buildCategoryTree } from '../../hooks/useCategories';
 import { Category } from '../../types';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
+import Select from '../../components/ui/Select';
 import { slugify } from '../../lib/utils';
 
 export default function Categories() {
@@ -19,12 +20,72 @@ export default function Categories() {
     name_mk: '',
     name_en: '',
     slug: '',
+    parent_id: '',
+    display_order: 0,
   });
   const [error, setError] = useState('');
 
+  // Build category tree for display
+  const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
+
+  // Get parent category options (exclude current category and its children when editing)
+  const parentOptions = useMemo(() => {
+    const options: { value: string; label: string }[] = [
+      { value: '', label: '— No Parent (Top Level) —' },
+    ];
+
+    const getChildIds = (cat: Category): string[] => {
+      const ids = [cat.id];
+      if (cat.subcategories) {
+        cat.subcategories.forEach((sub) => {
+          ids.push(...getChildIds(sub));
+        });
+      }
+      return ids;
+    };
+
+    const excludeIds = editingCategory
+      ? getChildIds(categoryTree.find((c) => c.id === editingCategory.id) || editingCategory)
+      : [];
+
+    const addOptions = (cats: Category[], prefix: string = '') => {
+      cats.forEach((cat) => {
+        if (!excludeIds.includes(cat.id)) {
+          options.push({
+            value: cat.id,
+            label: `${prefix}${cat.name_en}`,
+          });
+          if (cat.subcategories) {
+            addOptions(cat.subcategories, `${prefix}  `);
+          }
+        }
+      });
+    };
+
+    addOptions(categoryTree);
+    return options;
+  }, [categories, categoryTree, editingCategory]);
+
+  // Flatten categories for table display with indentation info
+  const flattenedCategories = useMemo(() => {
+    const result: { category: Category; level: number }[] = [];
+
+    const flatten = (cats: Category[], level: number = 0) => {
+      cats.forEach((cat) => {
+        result.push({ category: cat, level });
+        if (cat.subcategories) {
+          flatten(cat.subcategories, level + 1);
+        }
+      });
+    };
+
+    flatten(categoryTree);
+    return result;
+  }, [categoryTree]);
+
   const openCreateModal = () => {
     setEditingCategory(null);
-    setFormData({ name_mk: '', name_en: '', slug: '' });
+    setFormData({ name_mk: '', name_en: '', slug: '', parent_id: '', display_order: 0 });
     setError('');
     setIsModalOpen(true);
   };
@@ -35,6 +96,8 @@ export default function Categories() {
       name_mk: category.name_mk,
       name_en: category.name_en,
       slug: category.slug,
+      parent_id: category.parent_id || '',
+      display_order: category.display_order || 0,
     });
     setError('');
     setIsModalOpen(true);
@@ -45,21 +108,22 @@ export default function Categories() {
     setError('');
 
     const slug = formData.slug || slugify(formData.name_en);
+    const categoryData = {
+      name_mk: formData.name_mk,
+      name_en: formData.name_en,
+      slug,
+      parent_id: formData.parent_id || null,
+      display_order: formData.display_order,
+    };
 
     if (editingCategory) {
-      const { error } = await updateCategory(editingCategory.id, {
-        ...formData,
-        slug,
-      });
+      const { error } = await updateCategory(editingCategory.id, categoryData);
       if (error) {
         setError(error);
         return;
       }
     } else {
-      const { error } = await createCategory({
-        ...formData,
-        slug,
-      });
+      const { error } = await createCategory(categoryData);
       if (error) {
         setError(error);
         return;
@@ -96,6 +160,13 @@ export default function Categories() {
     }));
   };
 
+  // Get parent category name for display
+  const getParentName = (parentId: string | null | undefined) => {
+    if (!parentId) return null;
+    const parent = categories.find((c) => c.id === parentId);
+    return parent?.name_en || null;
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -125,6 +196,12 @@ export default function Categories() {
                     Name (MK)
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-medium text-dark-green">
+                    Parent
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-dark-green">
+                    Order
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-dark-green">
                     Slug
                   </th>
                   <th className="px-4 py-3 text-right text-sm font-medium text-dark-green">
@@ -133,13 +210,26 @@ export default function Categories() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-off-white-2">
-                {categories.map((category) => (
+                {flattenedCategories.map(({ category, level }) => (
                   <tr key={category.id} className="hover:bg-off-white-1/50">
                     <td className="px-4 py-3 font-medium text-dark-green">
-                      {category.name_en}
+                      <span style={{ paddingLeft: `${level * 24}px` }} className="flex items-center gap-2">
+                        {level > 0 && (
+                          <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        )}
+                        {category.name_en}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-dark-green/80">
                       {category.name_mk}
+                    </td>
+                    <td className="px-4 py-3 text-dark-green/60 text-sm">
+                      {getParentName(category.parent_id) || '—'}
+                    </td>
+                    <td className="px-4 py-3 text-dark-green/60 text-sm">
+                      {category.display_order || 0}
                     </td>
                     <td className="px-4 py-3 text-dark-green/60 text-sm">
                       {category.slug}
@@ -225,6 +315,30 @@ export default function Categories() {
             required
           />
 
+          <Select
+            id="parent_id"
+            label="Parent Category"
+            value={formData.parent_id}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, parent_id: e.target.value }))
+            }
+            options={parentOptions}
+          />
+
+          <Input
+            id="display_order"
+            label="Display Order"
+            type="number"
+            value={formData.display_order.toString()}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                display_order: parseInt(e.target.value) || 0,
+              }))
+            }
+            placeholder="0"
+          />
+
           <Input
             id="slug"
             label="Slug"
@@ -261,9 +375,16 @@ export default function Categories() {
         onClose={() => setDeleteModalOpen(false)}
         title="Delete Category"
       >
-        <p className="text-dark-green mb-6">
-          Are you sure you want to delete "{categoryToDelete?.name_en}"? Products in
-          this category will have their category set to none.
+        <p className="text-dark-green mb-4">
+          Are you sure you want to delete "{categoryToDelete?.name_en}"?
+        </p>
+        {categoryToDelete?.parent_id === null && categories.some((c) => c.parent_id === categoryToDelete?.id) && (
+          <p className="text-amber-600 text-sm mb-4">
+            Warning: This category has subcategories. Deleting it will also delete all subcategories.
+          </p>
+        )}
+        <p className="text-dark-green/70 text-sm mb-6">
+          Products in this category will have their category set to none.
         </p>
         <div className="flex gap-3">
           <Button

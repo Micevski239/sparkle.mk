@@ -5,8 +5,16 @@ export interface Category {
   name_mk: string;
   name_en: string;
   slug: string;
+  parent_id?: string | null;
+  display_order: number;
   created_at: string;
+  // UI-only fields (not in DB)
+  subcategories?: Category[];
+  productCount?: number;
 }
+
+export type SortOption = 'on_sale' | 'newest' | 'price_asc' | 'price_desc' | 'name';
+export type ViewMode = 2 | 3 | 4 | 5 | 'list';
 
 export interface Product {
   id: string;
@@ -15,6 +23,7 @@ export interface Product {
   description_mk: string | null;
   description_en: string | null;
   price: number;
+  sale_price: number | null;
   image_url: string | null;
   category_id: string | null;
   status: ProductStatus;
@@ -45,6 +54,19 @@ export interface HomepageGridImage {
   link_url: string | null;
   order_index: number;
   is_featured: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WelcomeTile {
+  id: string;
+  label_en: string;
+  label_mk: string;
+  image_url: string | null;
+  bg_color: string;
+  link_url: string;
+  display_order: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;

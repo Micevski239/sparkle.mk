@@ -9,6 +9,7 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
 
 // Admin pages
 import Login from './pages/admin/Login';
@@ -17,6 +18,7 @@ import ProductForm from './pages/admin/ProductForm';
 import Categories from './pages/admin/Categories';
 import HeroSlides from './pages/admin/HeroSlides';
 import GridImages from './pages/admin/GridImages';
+import WelcomeTiles from './pages/admin/WelcomeTiles';
 
 export default function App() {
   return (
@@ -42,7 +44,13 @@ export default function App() {
           <Route path="/admin/categories" element={<Categories />} />
           <Route path="/admin/hero-slides" element={<HeroSlides />} />
           <Route path="/admin/grid-images" element={<GridImages />} />
+          <Route path="/admin/welcome-tiles" element={<WelcomeTiles />} />
         </Route>
+      </Route>
+
+      {/* 404 Catch-all */}
+      <Route element={<Layout />}>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

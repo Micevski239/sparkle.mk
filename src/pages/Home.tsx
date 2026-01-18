@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
 import { formatPrice } from '../lib/utils';
+import WelcomeSection from '../components/WelcomeSection';
 
 export default function Home() {
   const { language } = useLanguage();
@@ -181,6 +182,11 @@ export default function Home() {
       </section>
 
       {/* ============================================
+          WELCOME SECTION + CATEGORY TILES
+          ============================================ */}
+      <WelcomeSection />
+
+      {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
       <section className="py-12 md:py-16 px-6 bg-white">
@@ -240,13 +246,25 @@ export default function Home() {
                         </svg>
                       </div>
                     )}
+                    {product.is_on_sale && product.sale_price && (
+                      <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-3 py-1">
+                        {language === 'mk' ? 'Попуст' : 'Sale'}
+                      </div>
+                    )}
                   </div>
                   <h3 className="text-sm text-gray-900 mb-1 group-hover:text-dark-green transition-colors">
                     {language === 'mk' ? product.title_mk : product.title_en}
                   </h3>
-                  <p className="text-sm text-gray-500">
-                    {formatPrice(product.price)}
-                  </p>
+                  <div className="text-sm text-gray-500">
+                    {product.sale_price && product.is_on_sale ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-red-500 font-medium">{formatPrice(product.sale_price)}</span>
+                        <span className="line-through text-gray-400">{formatPrice(product.price)}</span>
+                      </div>
+                    ) : (
+                      formatPrice(product.price)
+                    )}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -263,7 +281,7 @@ export default function Home() {
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-20 px-6" style={{ backgroundColor: '#e3ded1' }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Single big image */}
@@ -298,60 +316,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============================================
-          INSTAGRAM CTA - Full width banner
-          ============================================ */}
-      <section className="relative h-[500px] md:h-[600px] overflow-hidden">
-        {/* Background Image */}
-        <img
-          src="/instagram-bg.jpg"
-          alt="Instagram"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
-
-        {/* Content */}
-        <div className="relative h-full flex items-center justify-center px-6">
-          <div className="text-center max-w-2xl">
-            {/* Instagram Icon */}
-            <div className="w-20 h-20 mx-auto mb-8 rounded-full border-2 border-white/30 flex items-center justify-center">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-              </svg>
-            </div>
-
-            {/* Text */}
-            <p className="text-sm tracking-[0.3em] text-white/60 uppercase mb-4">
-              {language === 'mk' ? 'Следи нè на Instagram' : 'Follow us on Instagram'}
-            </p>
-
-            <h2 className="text-4xl md:text-6xl font-light tracking-[0.15em] text-white mb-6">
-              @sparkle.mk
-            </h2>
-
-            <p className="text-white/70 mb-10 max-w-md mx-auto text-lg">
-              {language === 'mk'
-                ? 'Погледни ги нашите најнови творби и инспирирај се за твојот дом'
-                : 'See our latest creations and get inspired for your home'}
-            </p>
-
-            {/* Button */}
-            <a
-              href="https://instagram.com/sparkle.mk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-10 py-4 bg-white text-gray-900 text-sm tracking-wider uppercase hover:bg-white/90 transition-all group"
-            >
-              <svg className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
-              </svg>
-              {language === 'mk' ? 'Следи нè' : 'Follow Us'}
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

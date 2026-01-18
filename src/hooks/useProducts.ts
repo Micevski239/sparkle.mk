@@ -1,14 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { Product, ProductStatus } from '../types';
+import { Product, ProductStatus, SortOption } from '../types';
 
 interface UseProductsOptions {
   categoryId?: string | null;
+  categoryIds?: string[];
   status?: ProductStatus | ProductStatus[];
   includeCategory?: boolean;
   isBestSeller?: boolean;
   isOnSale?: boolean;
   limit?: number;
+  offset?: number;
+  sortBy?: SortOption;
 }
 
 export function useProducts(options: UseProductsOptions = {}) {
@@ -23,11 +26,35 @@ export function useProducts(options: UseProductsOptions = {}) {
 
       let query = supabase
         .from('products')
-        .select(options.includeCategory ? '*, category:categories(*)' : '*')
-        .order('created_at', { ascending: false });
+        .select(options.includeCategory ? '*, category:categories(*)' : '*');
+
+      // Apply sorting
+      switch (options.sortBy) {
+        case 'on_sale':
+          query = query.order('is_on_sale', { ascending: false, nullsFirst: false })
+            .order('created_at', { ascending: false });
+          break;
+        case 'price_asc':
+          query = query.order('price', { ascending: true });
+          break;
+        case 'price_desc':
+          query = query.order('price', { ascending: false });
+          break;
+        case 'name':
+          query = query.order('title_en', { ascending: true });
+          break;
+        case 'newest':
+        default:
+          query = query.order('created_at', { ascending: false });
+          break;
+      }
 
       if (options.categoryId) {
         query = query.eq('category_id', options.categoryId);
+      }
+
+      if (options.categoryIds?.length) {
+        query = query.in('category_id', options.categoryIds);
       }
 
       if (options.status) {
@@ -46,7 +73,10 @@ export function useProducts(options: UseProductsOptions = {}) {
         query = query.eq('is_on_sale', options.isOnSale);
       }
 
-      if (options.limit) {
+      // Apply pagination
+      if (options.offset !== undefined && options.limit !== undefined) {
+        query = query.range(options.offset, options.offset + options.limit - 1);
+      } else if (options.limit) {
         query = query.limit(options.limit);
       }
 
@@ -59,13 +89,133 @@ export function useProducts(options: UseProductsOptions = {}) {
     } finally {
       setLoading(false);
     }
-  }, [options.categoryId, JSON.stringify(options.status), options.includeCategory, options.isBestSeller, options.isOnSale, options.limit]);
+  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.includeCategory, options.isBestSeller, options.isOnSale, options.limit, options.offset, options.sortBy]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
   return { products, loading, error, refetch: fetchProducts };
+}
+
+// Hook for paginated products with Load More functionality
+interface UsePaginatedProductsOptions {
+  categoryId?: string | null;
+  categoryIds?: string[];
+  status?: ProductStatus | ProductStatus[];
+  sortBy?: SortOption;
+  pageSize?: number;
+}
+
+export function usePaginatedProducts(options: UsePaginatedProductsOptions = {}) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
+  const pageSize = options.pageSize || 12;
+
+  const fetchProducts = useCallback(async (offset: number = 0, append: boolean = false) => {
+    try {
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+        setProducts([]);
+      }
+      setError(null);
+
+      let query = supabase
+        .from('products')
+        .select('*, category:categories(*)', { count: 'exact' });
+
+      // Apply sorting
+      switch (options.sortBy) {
+        case 'on_sale':
+          query = query.order('is_on_sale', { ascending: false, nullsFirst: false })
+            .order('created_at', { ascending: false });
+          break;
+        case 'price_asc':
+          query = query.order('price', { ascending: true });
+          break;
+        case 'price_desc':
+          query = query.order('price', { ascending: false });
+          break;
+        case 'name':
+          query = query.order('title_en', { ascending: true });
+          break;
+        case 'newest':
+        default:
+          query = query.order('created_at', { ascending: false });
+          break;
+      }
+
+      if (options.categoryId) {
+        query = query.eq('category_id', options.categoryId);
+      }
+
+      if (options.categoryIds?.length) {
+        query = query.in('category_id', options.categoryIds);
+      }
+
+      if (options.status) {
+        if (Array.isArray(options.status)) {
+          query = query.in('status', options.status);
+        } else {
+          query = query.eq('status', options.status);
+        }
+      }
+
+      query = query.range(offset, offset + pageSize - 1);
+
+      const { data, error: fetchError, count } = await query;
+
+      if (fetchError) throw fetchError;
+
+      const newProducts = (data as unknown as Product[]) || [];
+
+      if (append) {
+        setProducts((prev) => [...prev, ...newProducts]);
+      } else {
+        setProducts(newProducts);
+      }
+
+      setTotalCount(count || 0);
+      setHasMore(offset + newProducts.length < (count || 0));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch products');
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.sortBy, pageSize]);
+
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchProducts(products.length, true);
+    }
+  }, [fetchProducts, products.length, loadingMore, hasMore]);
+
+  const reset = useCallback(() => {
+    fetchProducts(0, false);
+  }, [fetchProducts]);
+
+  useEffect(() => {
+    fetchProducts(0, false);
+  }, [fetchProducts]);
+
+  return {
+    products,
+    loading,
+    loadingMore,
+    error,
+    totalCount,
+    hasMore,
+    loadMore,
+    reset,
+  };
 }
 
 export function useProduct(id: string | undefined) {

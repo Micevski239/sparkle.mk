@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { HomepageHeroSlide, HomepageGridImage } from '../types';
+import { HomepageHeroSlide, HomepageGridImage, WelcomeTile } from '../types';
 
 // Public hooks for frontend
 export function useHomepageHeroSlides() {
@@ -344,6 +344,181 @@ export function useGridImageMutations() {
         createGridImage,
         updateGridImage,
         deleteGridImage,
+        uploadImage,
+        loading,
+        error,
+    };
+}
+
+// Public hook for welcome tiles
+export function useWelcomeTiles() {
+    const [tiles, setTiles] = useState<WelcomeTile[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchTiles() {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const { data, error: fetchError } = await supabase
+                    .from('welcome_tiles')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('display_order', { ascending: true });
+
+                if (fetchError) throw fetchError;
+                setTiles((data as unknown as WelcomeTile[]) || []);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to fetch welcome tiles');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchTiles();
+    }, []);
+
+    return { tiles, loading, error };
+}
+
+// Admin hook for welcome tiles
+export function useAdminWelcomeTiles() {
+    const [tiles, setTiles] = useState<WelcomeTile[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchTiles = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const { data, error: fetchError } = await supabase
+                .from('welcome_tiles')
+                .select('*')
+                .order('display_order', { ascending: true });
+
+            if (fetchError) throw fetchError;
+            setTiles((data as unknown as WelcomeTile[]) || []);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to fetch welcome tiles');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchTiles();
+    }, [fetchTiles]);
+
+    return { tiles, loading, error, refetch: fetchTiles };
+}
+
+// Mutations for welcome tiles
+export function useWelcomeTileMutations() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const createTile = async (tile: Omit<WelcomeTile, 'id' | 'created_at' | 'updated_at'>) => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const { data, error: createError } = await supabase
+                .from('welcome_tiles')
+                .insert(tile)
+                .select()
+                .single();
+
+            if (createError) throw createError;
+            return { data, error: null };
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to create tile';
+            setError(errorMessage);
+            return { data: null, error: errorMessage };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateTile = async (id: string, updates: Partial<WelcomeTile>) => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const { data, error: updateError } = await supabase
+                .from('welcome_tiles')
+                .update(updates)
+                .eq('id', id)
+                .select()
+                .single();
+
+            if (updateError) throw updateError;
+            return { data, error: null };
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to update tile';
+            setError(errorMessage);
+            return { data: null, error: errorMessage };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteTile = async (id: string) => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const { error: deleteError } = await supabase
+                .from('welcome_tiles')
+                .delete()
+                .eq('id', id);
+
+            if (deleteError) throw deleteError;
+            return { error: null };
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to delete tile';
+            setError(errorMessage);
+            return { error: errorMessage };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const uploadImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const filePath = `welcome-tiles/${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('product-images')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('product-images')
+                .getPublicUrl(filePath);
+
+            return { url: publicUrl, error: null };
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to upload image';
+            setError(errorMessage);
+            return { url: null, error: errorMessage };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return {
+        createTile,
+        updateTile,
+        deleteTile,
         uploadImage,
         loading,
         error,
