@@ -78,3 +78,58 @@ export interface User {
   id: string;
   email: string;
 }
+
+// About Section Types
+export interface AboutStat {
+  id: string;
+  value: string;
+  label_en: string;
+  label_mk: string;
+  icon: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface AboutContent {
+  id: string;
+  section: 'main' | 'quote';
+  title_en: string | null;
+  title_mk: string | null;
+  subtitle_en: string | null;
+  subtitle_mk: string | null;
+  description_en: string | null;
+  description_mk: string | null;
+  image_url: string | null;
+  founder_name: string | null;
+  signature_url: string | null;
+  updated_at: string;
+}
+
+export interface AboutGalleryImage {
+  id: string;
+  image_url: string;
+  alt_en: string | null;
+  alt_mk: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+// Testimonials Types
+export interface Testimonial {
+  id: string;
+  customer_name: string;
+  customer_photo_url: string | null;
+  customer_location_en: string | null;
+  customer_location_mk: string | null;
+  quote_en: string;
+  quote_mk: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  display_order: number;
+  is_active: boolean;
+  is_featured: boolean;
+  testimonial_date: string;
+  created_at: string;
+  updated_at: string;
+}

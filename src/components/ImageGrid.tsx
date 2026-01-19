@@ -3,7 +3,7 @@ import { useHomepageGridImages } from '../hooks/useHomepage';
 import { useLanguage } from '../context/LanguageContext';
 
 // Instagram handle used across the app
-const INSTAGRAM_HANDLE = 'sparkle.mk';
+const INSTAGRAM_HANDLE = '_sparkle.mk';
 
 interface ImageGridProps {
   embedded?: boolean; // when inside a white section that already has gutters

@@ -19,6 +19,8 @@ import Categories from './pages/admin/Categories';
 import HeroSlides from './pages/admin/HeroSlides';
 import GridImages from './pages/admin/GridImages';
 import WelcomeTiles from './pages/admin/WelcomeTiles';
+import AboutSectionAdmin from './pages/admin/AboutSection';
+import TestimonialsAdmin from './pages/admin/Testimonials';
 
 export default function App() {
   return (
@@ -45,6 +47,8 @@ export default function App() {
           <Route path="/admin/hero-slides" element={<HeroSlides />} />
           <Route path="/admin/grid-images" element={<GridImages />} />
           <Route path="/admin/welcome-tiles" element={<WelcomeTiles />} />
+          <Route path="/admin/about-section" element={<AboutSectionAdmin />} />
+          <Route path="/admin/testimonials" element={<TestimonialsAdmin />} />
         </Route>
       </Route>
 

@@ -1,6 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 
-const INSTAGRAM_HANDLE = 'sparkle.mk';
+const INSTAGRAM_HANDLE = '_sparkle.mk';
 
 export default function Contact() {
   const { language, t } = useLanguage();

@@ -6,7 +6,7 @@ interface InstagramCTAProps {
 }
 
 // Instagram handle - update this with your actual handle
-const INSTAGRAM_HANDLE = 'sparkle.mk';
+const INSTAGRAM_HANDLE = '_sparkle.mk';
 
 export default function InstagramCTA({ className }: InstagramCTAProps) {
   const { t } = useLanguage();

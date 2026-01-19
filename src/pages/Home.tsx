@@ -4,6 +4,8 @@ import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
 import { formatPrice } from '../lib/utils';
 import WelcomeSection from '../components/WelcomeSection';
+import AboutSection from '../components/AboutSection';
+import TestimonialsSection from '../components/TestimonialsSection';
 
 export default function Home() {
   const { language } = useLanguage();
@@ -187,6 +189,11 @@ export default function Home() {
       <WelcomeSection />
 
       {/* ============================================
+          TESTIMONIALS SECTION
+          ============================================ */}
+      <TestimonialsSection />
+
+      {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
       <section className="py-12 md:py-16 px-6 bg-white">
@@ -281,40 +288,7 @@ export default function Home() {
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <section className="py-20 px-6" style={{ backgroundColor: '#e3ded1' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Single big image */}
-            <div className="aspect-[4/5] overflow-hidden">
-              <img
-                src="/about.jpg"
-                alt={language === 'mk' ? 'Рачна изработка' : 'Handcrafted'}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-
-            <div>
-              <p className="text-sm tracking-[0.3em] text-gray-400 uppercase mb-4">
-                {language === 'mk' ? 'Нашата приказна' : 'Our Story'}
-              </p>
-              <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-6">
-                {language === 'mk' ? 'Создадено со љубов' : 'Created with Love'}
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                {language === 'mk'
-                  ? 'Секој производ што го создаваме е единствен. Со години искуство и страст кон занаетот, правиме свеќи и декорации кои носат топлина и карактер во секој дом.'
-                  : 'Every product we create is unique. With years of experience and passion for the craft, we make candles and decorations that bring warmth and character to every home.'}
-              </p>
-              <Link
-                to="/about"
-                className="inline-flex items-center px-6 py-3 border border-gray-900 text-gray-900 text-sm tracking-wider uppercase hover:bg-gray-900 hover:text-white transition-all"
-              >
-                {language === 'mk' ? 'Повеќе за нас' : 'Learn More'}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AboutSection />
 
     </div>
   );

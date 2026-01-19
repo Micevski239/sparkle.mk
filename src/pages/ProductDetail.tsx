@@ -151,7 +151,7 @@ export default function ProductDetail() {
                     : 'Interested in this product?'}
                 </p>
                 <a
-                  href="https://instagram.com/sparkle.mk"
+                  href="https://instagram.com/_sparkle.mk"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
