@@ -155,7 +155,7 @@ export default function Layout() {
                   href="https://instagram.com/_sparkle.mk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                  className="hidden sm:block p-2 text-gray-500 hover:text-gray-900 transition-colors"
                   aria-label="Instagram"
                 >
                   <InstagramIcon />
@@ -164,7 +164,7 @@ export default function Layout() {
                   href="https://www.facebook.com/profile.php?id=61567398783026"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                  className="hidden sm:block p-2 text-gray-500 hover:text-gray-900 transition-colors"
                   aria-label="Facebook"
                 >
                   <FacebookIcon />
@@ -216,7 +216,7 @@ export default function Layout() {
       </header>
 
       {/* Spacer for fixed header */}
-      <div className={`transition-all duration-300 ${scrolled ? 'h-12 md:h-12' : 'h-[70px] md:h-[104px]'}`} />
+      <div className={`transition-all duration-300 ${scrolled ? 'h-12 md:h-12' : 'h-14 md:h-[104px]'}`} />
 
       {/* Main content */}
       <main className="flex-1">

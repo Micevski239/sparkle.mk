@@ -90,7 +90,7 @@ function TestimonialCard({ testimonial, language }: { testimonial: Omit<Testimon
     const quote = language === 'mk' ? testimonial.quote_mk : testimonial.quote_en;
 
     return (
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 flex flex-col h-full min-w-[280px] max-w-[320px]">
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col h-full min-w-[200px] sm:min-w-[280px] max-w-[320px]">
             <StarRating rating={testimonial.rating} />
 
             <p className="text-gray-700 mt-4 mb-6 flex-grow text-sm leading-relaxed italic">
@@ -190,7 +190,7 @@ export default function TestimonialsSection() {
 
                 {/* Carousel Container */}
                 <div
-                    className="relative px-6 overflow-hidden"
+                    className="relative px-4 sm:px-6 overflow-hidden"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                     onTouchStart={() => setIsPaused(true)}
@@ -198,7 +198,7 @@ export default function TestimonialsSection() {
                 >
                     {/* Scrolling Container - CSS animation driven */}
                     <div
-                        className="flex gap-6 pb-4"
+                        className="flex gap-4 sm:gap-6 pb-4"
                         style={{
                             animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
                             animationPlayState: isPaused ? 'paused' : 'running',
@@ -216,8 +216,8 @@ export default function TestimonialsSection() {
                     </div>
 
                     {/* Gradient Edges */}
-                    <div className="absolute top-0 left-6 bottom-4 w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-                    <div className="absolute top-0 right-6 bottom-4 w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+                    <div className="absolute top-0 left-0 bottom-4 w-6 sm:w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+                    <div className="absolute top-0 right-0 bottom-4 w-6 sm:w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
                 </div>
             </div>
         </section>

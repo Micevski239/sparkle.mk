@@ -54,7 +54,7 @@ export default function WelcomeSection() {
   const tiles = dbTiles.length > 0 ? dbTiles : fallbackTiles;
 
   return (
-    <section className="w-full bg-white py-12 md:py-16 lg:py-20 px-6">
+    <section className="w-full bg-white py-8 md:py-16 lg:py-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-10 md:mb-14">
@@ -71,11 +71,10 @@ export default function WelcomeSection() {
 
           {/* Subtitle */}
           <p
-            className="text-center mx-auto text-sm md:text-base mt-5"
+            className="text-center mx-auto text-sm md:text-base mt-5 max-w-3xl px-2 sm:px-0"
             style={{
               fontWeight: 400,
               color: '#888888',
-              maxWidth: '800px',
               lineHeight: 1.6,
             }}
           >
@@ -87,7 +86,7 @@ export default function WelcomeSection() {
 
         {/* Tiles Grid */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="aspect-square bg-gray-100 mb-6" />
@@ -95,7 +94,7 @@ export default function WelcomeSection() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {tiles.map((tile) => (
               <Link
                 key={tile.id}
@@ -127,7 +126,7 @@ export default function WelcomeSection() {
 
                   {/* Tile Label - 50% overlap */}
                   <div
-                    className="absolute left-1/2 -translate-x-1/2 bottom-0 flex items-center justify-center shadow-sm text-sm md:text-base font-medium"
+                    className="absolute left-1/2 -translate-x-1/2 bottom-0 flex items-center justify-center text-center px-[3%] shadow-sm text-sm md:text-base font-medium"
                     style={{
                       width: '75%',
                       height: '48px',

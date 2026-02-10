@@ -63,23 +63,23 @@ export default function Home() {
           Left: 1 big card | Right: 2 stacked cards
           ============================================ */}
       <section className="bg-white">
-        <div className="px-[72px] py-8">
+        <div className="px-4 sm:px-6 lg:px-[72px] py-4 md:py-8">
           {slidesLoading ? (
             // Loading skeleton
-            <div className="grid lg:grid-cols-12 gap-4 lg:gap-6 h-[calc(100vh-160px)] min-h-[500px] max-h-[800px]">
-              <div className="lg:col-span-7 bg-gray-100 animate-pulse" />
-              <div className="lg:col-span-5 flex flex-col gap-4 lg:gap-6">
+            <div className="grid min-[700px]:grid-cols-12 gap-4 min-[700px]:gap-6 h-auto min-[700px]:h-[calc(100vh-160px)] min-h-0 min-[700px]:min-h-[500px] min-[700px]:max-h-[800px]">
+              <div className="min-[700px]:col-span-7 bg-gray-100 animate-pulse" />
+              <div className="min-[700px]:col-span-5 flex flex-col gap-4 min-[700px]:gap-6">
                 <div className="flex-1 bg-gray-100 animate-pulse" />
                 <div className="flex-1 bg-gray-100 animate-pulse" />
               </div>
             </div>
           ) : (
-            <div className="grid lg:grid-cols-12 gap-4 lg:gap-6 h-[calc(100vh-160px)] min-h-[500px] max-h-[800px]">
+            <div className="grid min-[700px]:grid-cols-12 gap-4 min-[700px]:gap-6 h-auto min-[700px]:h-[calc(100vh-160px)] min-h-0 min-[700px]:min-h-[500px] min-[700px]:max-h-[800px]">
 
               {/* LEFT - Big Card */}
               <Link
                 to={leftSlide?.button_link || defaultSlides.left.link}
-                className="lg:col-span-7 relative overflow-hidden group h-full"
+                className="min-[700px]:col-span-7 relative overflow-hidden group h-full min-h-[250px]"
               >
                 <img
                   src={leftSlide?.image_url || defaultSlides.left.image}
@@ -90,7 +90,7 @@ export default function Home() {
                   loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-12">
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-9 lg:p-12">
                   <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                     {language === 'mk' ? 'Нова колекција' : 'New Collection'}
                   </p>
@@ -111,12 +111,12 @@ export default function Home() {
               </Link>
 
               {/* RIGHT - 2 Stacked Cards */}
-              <div className="lg:col-span-5 flex flex-col gap-4 lg:gap-6">
+              <div className="min-[700px]:col-span-5 flex flex-col gap-4 min-[700px]:gap-6">
 
                 {/* Top Card */}
                 <Link
                   to={topRightSlide?.button_link || defaultSlides.topRight.link}
-                  className="flex-1 relative overflow-hidden group min-h-0"
+                  className="flex-1 relative overflow-hidden group min-h-[180px]"
                 >
                   <img
                     src={topRightSlide?.image_url || defaultSlides.topRight.image}
@@ -127,7 +127,7 @@ export default function Home() {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-9">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
                     <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                       {language === 'mk' ? 'Подароци' : 'Gifts'}
                     </p>
@@ -150,7 +150,7 @@ export default function Home() {
                 {/* Bottom Card */}
                 <Link
                   to={bottomRightSlide?.button_link || defaultSlides.bottomRight.link}
-                  className="flex-1 relative overflow-hidden group min-h-0"
+                  className="flex-1 relative overflow-hidden group min-h-[180px]"
                 >
                   <img
                     src={bottomRightSlide?.image_url || defaultSlides.bottomRight.image}
@@ -161,7 +161,7 @@ export default function Home() {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-9">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
                     <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                       {language === 'mk' ? 'Декорации' : 'Decorations'}
                     </p>
@@ -225,7 +225,7 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="animate-pulse">
                   <div className="aspect-[3/4] bg-gray-100 mb-4" />
@@ -235,7 +235,7 @@ export default function Home() {
               ))}
             </div>
           ) : featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {featuredProducts.map((product) => (
                 <Link
                   key={product.id}
