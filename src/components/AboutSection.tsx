@@ -90,6 +90,7 @@ export default function AboutSection() {
                                         ? (galleryImages[0]?.alt_mk || 'Процес на изработка')
                                         : (galleryImages[0]?.alt_en || 'Crafting process')}
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    loading="lazy"
                                 />
                             </div>
 
@@ -101,6 +102,7 @@ export default function AboutSection() {
                                         ? (galleryImages[1]?.alt_mk || 'Природни материјали')
                                         : (galleryImages[1]?.alt_en || 'Natural materials')}
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    loading="lazy"
                                 />
                             </div>
 
@@ -112,6 +114,7 @@ export default function AboutSection() {
                                         ? (galleryImages[2]?.alt_mk || 'Готови производи')
                                         : (galleryImages[2]?.alt_en || 'Finished products')}
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    loading="lazy"
                                 />
                             </div>
 
@@ -123,6 +126,7 @@ export default function AboutSection() {
                                         ? (galleryImages[3]?.alt_mk || 'Пакување со грижа')
                                         : (galleryImages[3]?.alt_en || 'Packaging with care')}
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    loading="lazy"
                                 />
                             </div>
                         </div>

@@ -111,6 +111,7 @@ export default function WelcomeSection() {
                         src={tile.image_url}
                         alt={language === 'mk' ? tile.label_mk : tile.label_en}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
                       />
                     ) : (
                       <div

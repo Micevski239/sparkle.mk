@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTestimonials } from '../hooks/useTestimonials';
 import { Testimonial } from '../types';
@@ -103,6 +103,7 @@ function TestimonialCard({ testimonial, language }: { testimonial: Omit<Testimon
                         src={testimonial.customer_photo_url}
                         alt={testimonial.customer_name}
                         className="w-10 h-10 rounded-full object-cover"
+                        loading="lazy"
                     />
                 ) : (
                     <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-medium">
@@ -124,78 +125,17 @@ export default function TestimonialsSection() {
     const { language } = useLanguage();
     const { testimonials, loading } = useTestimonials();
     const [isPaused, setIsPaused] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const autoScrollRef = useRef<number | null>(null);
 
     // Use fetched testimonials or fallback to defaults
     const displayTestimonials = testimonials.length > 0
         ? testimonials
         : defaultTestimonials.map((t, i) => ({ ...t, id: `default-${i}` }));
 
-    // Duplicate testimonials for infinite loop effect
-    const duplicatedTestimonials = [...displayTestimonials, ...displayTestimonials, ...displayTestimonials];
+    // Duplicate for seamless loop
+    const duplicatedTestimonials = [...displayTestimonials, ...displayTestimonials];
 
     const cardWidth = 320 + 24; // card width + gap
     const totalWidth = displayTestimonials.length * cardWidth;
-
-    // Auto-scroll logic
-    const startAutoScroll = useCallback(() => {
-        if (autoScrollRef.current) {
-            cancelAnimationFrame(autoScrollRef.current);
-        }
-
-        const scroll = () => {
-            if (scrollRef.current && !isPaused) {
-                scrollRef.current.scrollLeft += 1;
-
-                // Reset scroll position for infinite loop
-                if (scrollRef.current.scrollLeft >= totalWidth) {
-                    scrollRef.current.scrollLeft = 0;
-                }
-            }
-            autoScrollRef.current = requestAnimationFrame(scroll);
-        };
-
-        autoScrollRef.current = requestAnimationFrame(scroll);
-    }, [isPaused, totalWidth]);
-
-    useEffect(() => {
-        startAutoScroll();
-        return () => {
-            if (autoScrollRef.current) {
-                cancelAnimationFrame(autoScrollRef.current);
-            }
-        };
-    }, [startAutoScroll]);
-
-    // Calculate current dot indicator
-    useEffect(() => {
-        const handleScroll = () => {
-            if (scrollRef.current) {
-                const scrollLeft = scrollRef.current.scrollLeft % totalWidth;
-                const index = Math.round(scrollLeft / cardWidth) % displayTestimonials.length;
-                setCurrentIndex(index);
-            }
-        };
-
-        const scrollElement = scrollRef.current;
-        if (scrollElement) {
-            scrollElement.addEventListener('scroll', handleScroll);
-            return () => scrollElement.removeEventListener('scroll', handleScroll);
-        }
-    }, [cardWidth, totalWidth, displayTestimonials.length]);
-
-    // Handle dot click
-    const handleDotClick = (index: number) => {
-        if (scrollRef.current) {
-            const targetScroll = index * cardWidth;
-            scrollRef.current.scrollTo({
-                left: targetScroll,
-                behavior: 'smooth'
-            });
-        }
-    };
 
     if (loading) {
         return (
@@ -230,6 +170,12 @@ export default function TestimonialsSection() {
 
     return (
         <section className="py-16 bg-white">
+            <style>{`
+                @keyframes testimonial-scroll {
+                    from { transform: translateX(0); }
+                    to { transform: translateX(-${totalWidth}px); }
+                }
+            `}</style>
             <div className="w-full">
                 {/* Section Header */}
                 <div className="flex flex-col items-center text-center mb-10 px-6">
@@ -244,20 +190,19 @@ export default function TestimonialsSection() {
 
                 {/* Carousel Container */}
                 <div
-                    className="relative px-6"
+                    className="relative px-6 overflow-hidden"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                     onTouchStart={() => setIsPaused(true)}
                     onTouchEnd={() => setIsPaused(false)}
                 >
-                    {/* Scrolling Container */}
+                    {/* Scrolling Container - CSS animation driven */}
                     <div
-                        ref={scrollRef}
-                        className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
+                        className="flex gap-6 pb-4"
                         style={{
-                            scrollbarWidth: 'none',
-                            msOverflowStyle: 'none',
-                            WebkitOverflowScrolling: 'touch'
+                            animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
+                            animationPlayState: isPaused ? 'paused' : 'running',
+                            width: 'max-content',
                         }}
                     >
                         {duplicatedTestimonials.map((testimonial, index) => (
@@ -273,22 +218,6 @@ export default function TestimonialsSection() {
                     {/* Gradient Edges */}
                     <div className="absolute top-0 left-6 bottom-4 w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
                     <div className="absolute top-0 right-6 bottom-4 w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-                </div>
-
-                {/* Dot Indicators */}
-                <div className="flex justify-center gap-2 mt-6">
-                    {displayTestimonials.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleDotClick(index)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                                index === currentIndex
-                                    ? 'bg-gray-900 w-4'
-                                    : 'bg-gray-300 hover:bg-gray-400'
-                            }`}
-                            aria-label={`Go to testimonial ${index + 1}`}
-                        />
-                    ))}
                 </div>
             </div>
         </section>

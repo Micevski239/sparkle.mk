@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProduct, useProducts } from '../hooks/useProducts';
 import { formatPrice } from '../lib/utils';
+import { InstagramIcon, FacebookIcon } from '../components/icons';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -77,6 +78,7 @@ export default function ProductDetail() {
                   src={product.image_url}
                   alt={title}
                   className={`w-full h-full object-cover ${isSold ? 'opacity-60' : ''}`}
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -150,17 +152,26 @@ export default function ProductDetail() {
                     ? 'Заинтересирани за овој производ?'
                     : 'Interested in this product?'}
                 </p>
-                <a
-                  href="https://instagram.com/_sparkle.mk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
-                >
-                  <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
-                  </svg>
-                  {t.product.orderOnInstagram}
-                </a>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="https://instagram.com/_sparkle.mk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
+                  >
+                    <InstagramIcon className="w-5 h-5 mr-3" />
+                    {t.product.orderOnInstagram}
+                  </a>
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61567398783026"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
+                  >
+                    <FacebookIcon className="w-5 h-5 mr-3" />
+                    {t.product.orderOnFacebook}
+                  </a>
+                </div>
               </div>
             )}
           </div>

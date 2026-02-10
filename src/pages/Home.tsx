@@ -87,6 +87,7 @@ export default function Home() {
                     ? (leftSlide?.headline_text_mk || defaultSlides.left.headline_mk)
                     : (leftSlide?.headline_text_en || defaultSlides.left.headline_en)}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-12">
@@ -123,6 +124,7 @@ export default function Home() {
                       ? (topRightSlide?.headline_text_mk || defaultSlides.topRight.headline_mk)
                       : (topRightSlide?.headline_text_en || defaultSlides.topRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-9">
@@ -156,6 +158,7 @@ export default function Home() {
                       ? (bottomRightSlide?.headline_text_mk || defaultSlides.bottomRight.headline_mk)
                       : (bottomRightSlide?.headline_text_en || defaultSlides.bottomRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-9">
@@ -245,6 +248,7 @@ export default function Home() {
                         src={product.image_url}
                         alt={language === 'mk' ? product.title_mk : product.title_en}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">

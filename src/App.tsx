@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import AdminLayout from './components/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -24,6 +25,7 @@ import TestimonialsAdmin from './pages/admin/Testimonials';
 
 export default function App() {
   return (
+    <ErrorBoundary>
     <Routes>
       {/* Public routes */}
       <Route element={<Layout />}>
@@ -57,5 +59,6 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </ErrorBoundary>
   );
 }
