@@ -48,7 +48,7 @@ export default function AboutSection() {
 
     if (isLoading) {
         return (
-            <section className="py-20 px-6" style={{ backgroundColor: '#f9f7f4' }}>
+            <section className="relative z-[1] py-20 px-6" style={{ backgroundColor: '#f9f7f4' }}>
                 <div className="max-w-7xl mx-auto">
                     {/* Loading skeleton */}
                     <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
@@ -75,7 +75,7 @@ export default function AboutSection() {
     }
 
     return (
-        <section className="py-20 px-6" style={{ backgroundColor: '#f9f7f4' }}>
+        <section className="relative z-[1] py-20 px-6" style={{ backgroundColor: '#f9f7f4' }}>
             <div className="max-w-7xl mx-auto">
                 {/* Main Content Area with Gallery */}
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center mb-16">

@@ -246,7 +246,7 @@ export default function Products() {
         <div className="flex gap-8">
           {/* Sidebar - Desktop only */}
           {!categoriesLoading && categoryTree.length > 0 && (
-            <div className="hidden lg:block">
+            <div className="hidden lg:block relative z-[1] bg-white">
               <CategorySidebar
                 categories={categoryTree}
                 selectedCategory={selectedCategory}
