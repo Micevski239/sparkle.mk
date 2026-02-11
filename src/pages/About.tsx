@@ -100,7 +100,7 @@ export default function About() {
           </section>
 
           {/* Vision & Mission — side by side cards */}
-          <section>
+          <section className="relative z-[1] bg-white">
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-[#fef1d6]/40 rounded-2xl p-8">
                 <h2 className="text-2xl font-medium text-[#073f35] mb-4">
@@ -122,14 +122,14 @@ export default function About() {
           </section>
 
           {/* CTA */}
-          <section className="text-center py-8">
+          <section className="text-center py-8 relative z-10 bg-white">
             <p className="text-lg text-gray-600 mb-8">
               {t.about.ctaText}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+            <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
               <Link
                 to="/products"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="flex items-center justify-center min-h-[56px] px-4 py-4 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#68adbb' }}
               >
                 {t.about.ctaBrowse}
@@ -138,7 +138,7 @@ export default function About() {
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="flex items-center justify-center min-h-[56px] px-4 py-4 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#d978a2' }}
               >
                 {t.about.ctaInstagram}
@@ -147,7 +147,7 @@ export default function About() {
                 href={FACEBOOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="flex items-center justify-center min-h-[56px] px-4 py-4 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#cbc1aa' }}
               >
                 {t.about.ctaFacebook}
@@ -156,7 +156,7 @@ export default function About() {
                 href={TIKTOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="flex items-center justify-center min-h-[56px] px-4 py-4 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#333' }}
               >
                 {t.about.ctaTikTok}
