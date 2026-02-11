@@ -1,9 +1,43 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useRef, useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
 import { formatPrice } from '../lib/utils';
+
+function FadeInSection({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="transition-all duration-700 ease-out"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(32px)',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
 const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
@@ -191,20 +225,25 @@ export default function Home() {
       {/* ============================================
           WELCOME SECTION + CATEGORY TILES
           ============================================ */}
-      <Suspense fallback={<div className="py-16" />}>
-        <WelcomeSection />
-      </Suspense>
+      <FadeInSection>
+        <Suspense fallback={<div className="py-16" />}>
+          <WelcomeSection />
+        </Suspense>
+      </FadeInSection>
 
       {/* ============================================
           TESTIMONIALS SECTION
           ============================================ */}
-      <Suspense fallback={<div className="py-16" />}>
-        <TestimonialsSection />
-      </Suspense>
+      <FadeInSection>
+        <Suspense fallback={<div className="py-16" />}>
+          <TestimonialsSection />
+        </Suspense>
+      </FadeInSection>
 
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
+      <FadeInSection>
       <section className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -294,13 +333,16 @@ export default function Home() {
           )}
         </div>
       </section>
+      </FadeInSection>
 
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <Suspense fallback={<div className="py-20" />}>
-        <AboutSection />
-      </Suspense>
+      <FadeInSection>
+        <Suspense fallback={<div className="py-20" />}>
+          <AboutSection />
+        </Suspense>
+      </FadeInSection>
 
     </div>
   );
