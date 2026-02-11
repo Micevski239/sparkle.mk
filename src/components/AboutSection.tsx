@@ -75,7 +75,7 @@ export default function AboutSection() {
     }
 
     return (
-        <section className="py-20 px-6" style={{ backgroundColor: '#f9f7f4' }}>
+        <section className="py-20 px-6" style={{ backgroundColor: '#f9f7f4', contentVisibility: 'auto', containIntrinsicSize: 'auto 800px' }}>
             <div className="max-w-7xl mx-auto">
                 {/* Main Content Area with Gallery */}
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center mb-16">

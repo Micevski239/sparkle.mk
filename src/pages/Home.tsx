@@ -99,11 +99,11 @@ export default function Home() {
                       ? (leftSlide?.headline_text_mk || defaultSlides.left.headline_mk)
                       : (leftSlide?.headline_text_en || defaultSlides.left.headline_en)}
                   </h2>
-                  <span className="inline-flex items-center text-sm text-white/90 group-hover:text-white transition-colors">
+                  <span className="inline-flex items-center text-sm text-white/90 md:group-hover:text-white md:transition-colors">
                     {language === 'mk'
                       ? (leftSlide?.button_text_mk || defaultSlides.left.button_mk)
                       : (leftSlide?.button_text_en || defaultSlides.left.button_en)}
-                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-4 h-4 ml-2 md:group-hover:translate-x-1 md:transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </span>
@@ -136,11 +136,11 @@ export default function Home() {
                         ? (topRightSlide?.headline_text_mk || defaultSlides.topRight.headline_mk)
                         : (topRightSlide?.headline_text_en || defaultSlides.topRight.headline_en)}
                     </h3>
-                    <span className="inline-flex items-center text-sm text-white/90 group-hover:text-white transition-colors">
+                    <span className="inline-flex items-center text-sm text-white/90 md:group-hover:text-white md:transition-colors">
                       {language === 'mk'
                         ? (topRightSlide?.button_text_mk || defaultSlides.topRight.button_mk)
                         : (topRightSlide?.button_text_en || defaultSlides.topRight.button_en)}
-                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 ml-2 md:group-hover:translate-x-1 md:transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
                     </span>
@@ -170,11 +170,11 @@ export default function Home() {
                         ? (bottomRightSlide?.headline_text_mk || defaultSlides.bottomRight.headline_mk)
                         : (bottomRightSlide?.headline_text_en || defaultSlides.bottomRight.headline_en)}
                     </h3>
-                    <span className="inline-flex items-center text-sm text-white/90 group-hover:text-white transition-colors">
+                    <span className="inline-flex items-center text-sm text-white/90 md:group-hover:text-white md:transition-colors">
                       {language === 'mk'
                         ? (bottomRightSlide?.button_text_mk || defaultSlides.bottomRight.button_mk)
                         : (bottomRightSlide?.button_text_en || defaultSlides.bottomRight.button_en)}
-                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 ml-2 md:group-hover:translate-x-1 md:transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
                     </span>
@@ -199,7 +199,7 @@ export default function Home() {
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
-      <section className="py-12 md:py-16 px-6 bg-white">
+      <section className="py-12 md:py-16 px-6 bg-white" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' }}>
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="flex flex-col items-center text-center mb-10">
@@ -215,10 +215,10 @@ export default function Home() {
             </div>
             <Link
               to="/products"
-              className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors group mt-5"
+              className="inline-flex items-center text-sm text-gray-500 md:hover:text-gray-900 group mt-5"
             >
               {language === 'mk' ? 'Види ги сите' : 'View All'}
-              <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 ml-2 md:group-hover:translate-x-1 md:transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -247,7 +247,7 @@ export default function Home() {
                       <img
                         src={product.image_url}
                         alt={language === 'mk' ? product.title_mk : product.title_en}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-500"
                         loading="lazy"
                       />
                     ) : (
@@ -263,7 +263,7 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                  <h3 className="text-sm text-gray-900 mb-1 group-hover:text-dark-green transition-colors">
+                  <h3 className="text-sm text-gray-900 mb-1 md:group-hover:text-dark-green">
                     {language === 'mk' ? product.title_mk : product.title_en}
                   </h3>
                   <div className="text-sm text-gray-500">

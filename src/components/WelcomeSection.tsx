@@ -54,7 +54,7 @@ export default function WelcomeSection() {
   const tiles = dbTiles.length > 0 ? dbTiles : fallbackTiles;
 
   return (
-    <section className="w-full bg-white py-8 md:py-16 lg:py-20 px-4 sm:px-6">
+    <section className="w-full bg-white py-8 md:py-16 lg:py-20 px-4 sm:px-6" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 500px' }}>
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-10 md:mb-14">

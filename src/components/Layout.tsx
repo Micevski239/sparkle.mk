@@ -46,9 +46,10 @@ export default function Layout() {
       <ScrollToTop />
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-white md:transition-all md:duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-white md:transition-all md:duration-300 will-change-transform ${
           scrolled ? 'md:shadow-sm' : ''
         }`}
+        style={{ backfaceVisibility: 'hidden' }}
       >
         {/* Top Utilities Bar - hides on scroll (desktop) */}
         <div className={`hidden md:block border-b border-gray-100 transition-all duration-300 overflow-hidden ${
