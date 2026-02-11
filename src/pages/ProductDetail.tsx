@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProduct, useProducts } from '../hooks/useProducts';
 import { formatPrice } from '../lib/utils';
-import { InstagramIcon, FacebookIcon } from '../components/icons';
+import { InstagramIcon, FacebookIcon, TikTokIcon } from '../components/icons';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -171,6 +171,15 @@ export default function ProductDetail() {
                   >
                     <FacebookIcon className="w-5 h-5 mr-3" />
                     {t.product.orderOnFacebook}
+                  </a>
+                  <a
+                    href="https://www.tiktok.com/@_sparkle.mk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
+                  >
+                    <TikTokIcon className="w-5 h-5 mr-3" />
+                    {t.product.watchOnTikTok}
                   </a>
                 </div>
               </div>

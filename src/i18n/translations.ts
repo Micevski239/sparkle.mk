@@ -43,6 +43,7 @@ export const translations = {
     product: {
       orderOnInstagram: 'Нарачај преку Instagram',
       orderOnFacebook: 'Нарачај преку Facebook',
+      watchOnTikTok: 'Гледај нè на TikTok',
       description: 'Опис',
       price: 'Цена',
       status: 'Статус',
@@ -69,19 +70,22 @@ export const translations = {
       visionText: 'Сонуваме за свет каде малите детали носат големи емоции, а секој дом и простор се полнат со магија, светлина и радост. Нашата визија е Sparkle.mk да биде бренд што инспирира радост, уметност и уникатни моменти, преку уникатни, рачно изработени украси кои ги носат топлината и среќата кај секој што ги поседува.',
       mission: 'Мисија',
       missionText: 'Да внесеме малку магија, топлина и инспирација во секој дом со уникатни, eco-friendly декоративни производи и свеќи создадени со љубов и внимание кон секој детал. Преку рачна изработка и искрена посветеност, сакаме нашите производи да донесат радост, убави моменти и инспирација во секојдневието на нашите клиенти.',
-      ctaText: 'Ви се допаѓа тоа што го правиме? Разгледајте ги нашите производи или следете нè на Instagram и Facebook.',
+      ctaText: 'Ви се допаѓа тоа што го правиме? Разгледајте ги нашите производи или следете нè на Instagram, Facebook и TikTok.',
       ctaBrowse: 'Погледни производи',
       ctaInstagram: 'Следи на Instagram',
       ctaFacebook: 'Следи на Facebook',
+      ctaTikTok: 'Следи на TikTok',
     },
     // Contact page
     contact: {
       title: 'Контакт',
       followUs: 'Следи нè на Instagram',
-      orderInfo: 'За нарачки и прашања, контактирај нè преку Instagram или Facebook.',
+      orderInfo: 'За нарачки и прашања, контактирај нè преку Instagram, Facebook или TikTok.',
       instagramButton: 'Посети нè на Instagram',
       followFacebook: 'Следи нè на Facebook',
       facebookButton: 'Посети нè на Facebook',
+      followTikTok: 'Следи нè на TikTok',
+      tiktokButton: 'Посети нè на TikTok',
     },
     // Footer
     footer: {
@@ -139,6 +143,7 @@ export const translations = {
     product: {
       orderOnInstagram: 'Order on Instagram',
       orderOnFacebook: 'Order on Facebook',
+      watchOnTikTok: 'Watch us on TikTok',
       description: 'Description',
       price: 'Price',
       status: 'Status',
@@ -165,19 +170,22 @@ export const translations = {
       visionText: 'We dream of a world where small details carry big emotions, and every home and space is filled with magic, light, and joy. Our vision is for Sparkle.mk to be a brand that inspires joy, art, and unique moments through handcrafted decorations that bring warmth and happiness to everyone who owns them.',
       mission: 'Mission',
       missionText: 'To bring a touch of magic, warmth, and inspiration into every home with unique, eco-friendly decorative products and candles created with love and attention to every detail. Through handcrafting and sincere dedication, we want our products to bring joy, beautiful moments, and inspiration to the everyday lives of our customers.',
-      ctaText: 'Love what we do? Browse our products or follow us on Instagram and Facebook.',
+      ctaText: 'Love what we do? Browse our products or follow us on Instagram, Facebook and TikTok.',
       ctaBrowse: 'Browse Products',
       ctaInstagram: 'Follow on Instagram',
       ctaFacebook: 'Follow on Facebook',
+      ctaTikTok: 'Follow on TikTok',
     },
     // Contact page
     contact: {
       title: 'Contact',
       followUs: 'Follow us on Instagram',
-      orderInfo: 'For orders and inquiries, contact us through Instagram or Facebook.',
+      orderInfo: 'For orders and inquiries, contact us through Instagram, Facebook or TikTok.',
       instagramButton: 'Visit us on Instagram',
       followFacebook: 'Follow us on Facebook',
       facebookButton: 'Visit us on Facebook',
+      followTikTok: 'Follow us on TikTok',
+      tiktokButton: 'Visit us on TikTok',
     },
     // Footer
     footer: {

@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 const INSTAGRAM_URL = 'https://instagram.com/_sparkle.mk';
 const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61567398783026';
+const TIKTOK_URL = 'https://www.tiktok.com/@_sparkle.mk';
 
 export default function About() {
   const { t } = useLanguage();
@@ -123,10 +124,10 @@ export default function About() {
             <p className="text-lg text-gray-600 mb-8">
               {t.about.ctaText}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
               <Link
                 to="/products"
-                className="w-full sm:w-auto min-w-[220px] px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#68adbb' }}
               >
                 {t.about.ctaBrowse}
@@ -135,7 +136,7 @@ export default function About() {
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto min-w-[220px] px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#d978a2' }}
               >
                 {t.about.ctaInstagram}
@@ -144,10 +145,19 @@ export default function About() {
                 href={FACEBOOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto min-w-[220px] px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#cbc1aa' }}
               >
                 {t.about.ctaFacebook}
+              </a>
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
+                style={{ backgroundColor: '#333' }}
+              >
+                {t.about.ctaTikTok}
               </a>
             </div>
           </section>

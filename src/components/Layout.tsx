@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { InstagramIcon, FacebookIcon } from './icons';
+import { InstagramIcon, FacebookIcon, TikTokIcon } from './icons';
 import ScrollToTop from './ScrollToTop';
 
 const ScatteredOrnaments = lazy(() => import('./ScatteredOrnaments'));
@@ -108,6 +108,17 @@ export default function Layout() {
                 >
                   <FacebookIcon />
                 </a>
+
+                {/* TikTok */}
+                <a
+                  href="https://www.tiktok.com/@_sparkle.mk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                  aria-label="TikTok"
+                >
+                  <TikTokIcon />
+                </a>
               </div>
             </div>
           </div>
@@ -187,6 +198,15 @@ export default function Layout() {
                 >
                   <FacebookIcon />
                 </a>
+                <a
+                  href="https://www.tiktok.com/@_sparkle.mk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:block p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                  aria-label="TikTok"
+                >
+                  <TikTokIcon />
+                </a>
                 <button
                   onClick={() => setLanguage(language === 'mk' ? 'en' : 'mk')}
                   className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 transition-colors p-2"
@@ -254,22 +274,33 @@ export default function Layout() {
               </p>
 
               {/* Social */}
-              <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <div className="mt-6 flex flex-col gap-3">
                 <a
                   href="https://instagram.com/_sparkle.mk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
                 >
                   <InstagramIcon />
+                  <span className="text-sm">Instagram</span>
                 </a>
                 <a
                   href="https://www.facebook.com/profile.php?id=61567398783026"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
                 >
                   <FacebookIcon />
+                  <span className="text-sm">Facebook</span>
+                </a>
+                <a
+                  href="https://www.tiktok.com/@_sparkle.mk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+                >
+                  <TikTokIcon />
+                  <span className="text-sm">TikTok</span>
                 </a>
               </div>
             </div>
@@ -300,12 +331,12 @@ export default function Layout() {
               <p className="text-sm text-white/70 mb-4">
                 {t.contact.orderInfo}
               </p>
-              <div className="space-y-3">
+              <div className="flex flex-col gap-3">
                 <a
                   href="https://instagram.com/_sparkle.mk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-sm text-white hover:text-white/80 transition-colors"
+                  className="flex items-center text-sm text-white hover:text-white/80 transition-colors"
                 >
                   <InstagramIcon className="w-4 h-4 mr-2" />
                   @_sparkle.mk
@@ -314,10 +345,19 @@ export default function Layout() {
                   href="https://www.facebook.com/profile.php?id=61567398783026"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-sm text-white hover:text-white/80 transition-colors"
+                  className="flex items-center text-sm text-white hover:text-white/80 transition-colors"
                 >
                   <FacebookIcon className="w-4 h-4 mr-2" />
                   Sparkle.mk
+                </a>
+                <a
+                  href="https://www.tiktok.com/@_sparkle.mk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-sm text-white hover:text-white/80 transition-colors"
+                >
+                  <TikTokIcon className="w-4 h-4 mr-2" />
+                  @_sparkle.mk
                 </a>
               </div>
             </div>
