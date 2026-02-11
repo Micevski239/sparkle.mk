@@ -38,8 +38,10 @@ export default function App() {
   useEffect(() => {
     const splash = document.getElementById('splash');
     if (splash) {
-      splash.style.opacity = '0';
-      setTimeout(() => splash.remove(), 400);
+      setTimeout(() => {
+        splash.style.opacity = '0';
+        setTimeout(() => splash.remove(), 800);
+      }, 400);
     }
   }, []);
 

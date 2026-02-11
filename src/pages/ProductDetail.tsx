@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useFadeIn } from '../hooks/useFadeIn';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProduct, useProducts } from '../hooks/useProducts';
@@ -55,8 +56,10 @@ export default function ProductDetail() {
     : null;
   const isSold = product.status === 'sold';
 
+  const fadeIn = useFadeIn();
+
   return (
-    <div className="bg-white min-h-screen">
+    <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Back link */}
         <Link

@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import { useFadeIn } from '../hooks/useFadeIn';
 import { InstagramIcon, FacebookIcon, TikTokIcon } from '../components/icons';
 
 const INSTAGRAM_HANDLE = '_sparkle.mk';
@@ -7,9 +8,10 @@ const TIKTOK_URL = 'https://www.tiktok.com/@_sparkle.mk';
 
 export default function Contact() {
   const { language, t } = useLanguage();
+  const fadeIn = useFadeIn();
 
   return (
-    <div className="bg-white min-h-screen">
+    <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>
       <div className="max-w-4xl mx-auto px-6 py-16 md:py-24">
         {/* Header */}
         <div className="text-center mb-16">
