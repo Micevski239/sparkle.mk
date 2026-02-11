@@ -28,11 +28,9 @@ function FadeInSection({ children }: { children: ReactNode }) {
   return (
     <div
       ref={ref}
-      className="transition-all duration-700 ease-out"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(32px)',
-      }}
+      className={`transition-opacity duration-700 ease-out ${
+        visible ? 'opacity-100' : 'opacity-0'
+      }`}
     >
       {children}
     </div>

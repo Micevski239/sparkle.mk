@@ -65,7 +65,7 @@ const ornaments: { src: string; top: string; left?: string; right?: string; size
 
 export default function ScatteredOrnaments() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]" aria-hidden="true">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       {ornaments.map((o, i) => (
         <img
           key={i}
