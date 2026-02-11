@@ -62,11 +62,11 @@ export default function WelcomeSection() {
             {language === 'mk' ? 'Добредојдовте' : 'Welcome'}
           </p>
           <div className="flex items-center gap-3 md:gap-4">
-            <img src="/leaf.png" alt="" className="h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
+            <img src="/leaf.webp" alt="" className="h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
             <h2 className="text-2xl md:text-3xl font-light tracking-[0.1em] text-gray-900 uppercase">
               {language === 'mk' ? 'Sparkle.mk' : 'Sparkle.mk'}
             </h2>
-            <img src="/leaf.png" alt="" className="h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
+            <img src="/leaf.webp" alt="" className="h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
           </div>
 
           {/* Subtitle */}

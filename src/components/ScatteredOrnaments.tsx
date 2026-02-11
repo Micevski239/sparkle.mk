@@ -1,14 +1,14 @@
 const images = [
-  '/white.png',
-  '/star.png',
-  '/snowflake.png',
-  '/red.png',
-  '/present.png',
-  '/pinetree.png',
-  '/green.png',
-  '/christmas.png',
-  '/candy.png',
-  '/bell.png',
+  '/white.webp',
+  '/star.webp',
+  '/snowflake.webp',
+  '/red.webp',
+  '/present.webp',
+  '/pinetree.webp',
+  '/green.webp',
+  '/christmas.webp',
+  '/candy.webp',
+  '/bell.webp',
 ];
 
 const ornaments: { src: string; top: string; left?: string; right?: string; size: number; rotate: number }[] = [

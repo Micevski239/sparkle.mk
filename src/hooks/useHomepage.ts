@@ -16,7 +16,7 @@ export function useHomepageHeroSlides() {
 
                 const { data, error: fetchError } = await supabase
                     .from('homepage_hero_slides')
-                    .select('*')
+                    .select('id, image_url, headline_text_mk, headline_text_en, button_text_mk, button_text_en, button_link, order_index')
                     .eq('is_active', true)
                     .order('order_index', { ascending: true });
 
@@ -364,7 +364,7 @@ export function useWelcomeTiles() {
 
                 const { data, error: fetchError } = await supabase
                     .from('welcome_tiles')
-                    .select('*')
+                    .select('id, label_en, label_mk, image_url, bg_color, link_url, display_order')
                     .eq('is_active', true)
                     .order('display_order', { ascending: true });
 

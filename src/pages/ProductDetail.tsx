@@ -78,7 +78,8 @@ export default function ProductDetail() {
                   src={product.image_url}
                   alt={title}
                   className={`w-full h-full object-cover ${isSold ? 'opacity-60' : ''}`}
-                  loading="lazy"
+                  loading="eager"
+                  fetchPriority="high"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">

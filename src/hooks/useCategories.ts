@@ -52,7 +52,7 @@ export function useCategories() {
 
       const { data, error: fetchError } = await supabase
         .from('categories')
-        .select('*')
+        .select('id, name_mk, name_en, slug, parent_id, display_order, created_at')
         .order('display_order', { ascending: true })
         .order(language === 'mk' ? 'name_mk' : 'name_en', { ascending: true });
 
@@ -85,19 +85,22 @@ export function useCategoriesWithCounts() {
       setError(null);
 
       // Fetch categories
-      const { data: categoriesData, error: catError } = await supabase
-        .from('categories')
-        .select('*')
-        .order('display_order', { ascending: true })
-        .order(language === 'mk' ? 'name_mk' : 'name_en', { ascending: true });
+      const [catResult, countsResult] = await Promise.all([
+        supabase
+          .from('categories')
+          .select('id, name_mk, name_en, slug, parent_id, display_order, created_at')
+          .order('display_order', { ascending: true })
+          .order(language === 'mk' ? 'name_mk' : 'name_en', { ascending: true }),
+        supabase
+          .from('products')
+          .select('category_id')
+          .in('status', ['published', 'sold']),
+      ]);
 
+      const { data: categoriesData, error: catError } = catResult;
       if (catError) throw catError;
 
-      // Fetch product counts per category (only published products)
-      const { data: countsData, error: countsError } = await supabase
-        .from('products')
-        .select('category_id')
-        .in('status', ['published', 'sold']);
+      const { data: countsData, error: countsError } = countsResult;
 
       if (countsError) throw countsError;
 

@@ -1,28 +1,38 @@
-import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useEffect, lazy, Suspense } from 'react';
+import { Routes, Route, Outlet } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
-import AdminLayout from './components/AdminLayout';
-import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 
-// Public pages
+const AdminLayout = lazy(() => import('./components/AdminLayout'));
+const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
+
+function AdminAuthWrapper() {
+  return (
+    <AuthProvider>
+      <Outlet />
+    </AuthProvider>
+  );
+}
+
+// Public pages — only Home is eager (landing page)
 import Home from './pages/Home';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+const Products = lazy(() => import('./pages/Products'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
-// Admin pages
-import Login from './pages/admin/Login';
-import Dashboard from './pages/admin/Dashboard';
-import ProductForm from './pages/admin/ProductForm';
-import Categories from './pages/admin/Categories';
-import HeroSlides from './pages/admin/HeroSlides';
-import GridImages from './pages/admin/GridImages';
-import WelcomeTiles from './pages/admin/WelcomeTiles';
-import AboutSectionAdmin from './pages/admin/AboutSection';
-import TestimonialsAdmin from './pages/admin/Testimonials';
+// Admin pages — all lazy (behind auth wall)
+const Login = lazy(() => import('./pages/admin/Login'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const ProductForm = lazy(() => import('./pages/admin/ProductForm'));
+const Categories = lazy(() => import('./pages/admin/Categories'));
+const HeroSlides = lazy(() => import('./pages/admin/HeroSlides'));
+const GridImages = lazy(() => import('./pages/admin/GridImages'));
+const WelcomeTiles = lazy(() => import('./pages/admin/WelcomeTiles'));
+const AboutSectionAdmin = lazy(() => import('./pages/admin/AboutSection'));
+const TestimonialsAdmin = lazy(() => import('./pages/admin/Testimonials'));
 
 export default function App() {
   useEffect(() => {
@@ -35,6 +45,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+    <Suspense fallback={null}>
     <Routes>
       {/* Public routes */}
       <Route element={<Layout />}>
@@ -45,21 +56,21 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
       </Route>
 
-      {/* Admin login (no layout) */}
-      <Route path="/admin/login" element={<Login />} />
-
-      {/* Protected admin routes */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<Dashboard />} />
-          <Route path="/admin/products/new" element={<ProductForm />} />
-          <Route path="/admin/products/:id/edit" element={<ProductForm />} />
-          <Route path="/admin/categories" element={<Categories />} />
-          <Route path="/admin/hero-slides" element={<HeroSlides />} />
-          <Route path="/admin/grid-images" element={<GridImages />} />
-          <Route path="/admin/welcome-tiles" element={<WelcomeTiles />} />
-          <Route path="/admin/about-section" element={<AboutSectionAdmin />} />
-          <Route path="/admin/testimonials" element={<TestimonialsAdmin />} />
+      {/* Admin routes — AuthProvider only loads here */}
+      <Route element={<AdminAuthWrapper />}>
+        <Route path="/admin/login" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/products/new" element={<ProductForm />} />
+            <Route path="/admin/products/:id/edit" element={<ProductForm />} />
+            <Route path="/admin/categories" element={<Categories />} />
+            <Route path="/admin/hero-slides" element={<HeroSlides />} />
+            <Route path="/admin/grid-images" element={<GridImages />} />
+            <Route path="/admin/welcome-tiles" element={<WelcomeTiles />} />
+            <Route path="/admin/about-section" element={<AboutSectionAdmin />} />
+            <Route path="/admin/testimonials" element={<TestimonialsAdmin />} />
+          </Route>
         </Route>
       </Route>
 
@@ -68,6 +79,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </Suspense>
     </ErrorBoundary>
   );
 }

@@ -25,9 +25,10 @@ export function useProducts(options: UseProductsOptions = {}) {
       setLoading(true);
       setError(null);
 
+      const columns = 'id, title_mk, title_en, description_mk, description_en, price, sale_price, image_url, category_id, status, is_on_sale, is_best_seller, created_at';
       let query = supabase
         .from('products')
-        .select(options.includeCategory ? '*, category:categories(*)' : '*');
+        .select(options.includeCategory ? `${columns}, category:categories(id, name_mk, name_en, slug)` : columns);
 
       // Apply sorting
       switch (options.sortBy) {
@@ -129,9 +130,10 @@ export function usePaginatedProducts(options: UsePaginatedProductsOptions = {}) 
       }
       setError(null);
 
+      const cols = 'id, title_mk, title_en, price, sale_price, image_url, category_id, status, is_on_sale, is_best_seller, created_at';
       let query = supabase
         .from('products')
-        .select('*, category:categories(*)', { count: 'exact' });
+        .select(`${cols}, category:categories(id, name_mk, name_en, slug)`, { count: 'exact' });
 
       // Apply sorting
       switch (options.sortBy) {
@@ -238,7 +240,7 @@ export function useProduct(id: string | undefined) {
 
         const { data, error: fetchError } = await supabase
           .from('products')
-          .select('*, category:categories(*)')
+          .select('id, title_mk, title_en, description_mk, description_en, price, sale_price, image_url, category_id, status, is_on_sale, is_best_seller, created_at, updated_at, category:categories(id, name_mk, name_en, slug)')
           .eq('id', id)
           .single();
 
