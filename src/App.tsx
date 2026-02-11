@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
@@ -24,6 +25,14 @@ import AboutSectionAdmin from './pages/admin/AboutSection';
 import TestimonialsAdmin from './pages/admin/Testimonials';
 
 export default function App() {
+  useEffect(() => {
+    const splash = document.getElementById('splash');
+    if (splash) {
+      splash.style.opacity = '0';
+      setTimeout(() => splash.remove(), 400);
+    }
+  }, []);
+
   return (
     <ErrorBoundary>
     <Routes>

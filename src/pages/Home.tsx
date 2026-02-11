@@ -86,7 +86,7 @@ export default function Home() {
                   alt={language === 'mk'
                     ? (leftSlide?.headline_text_mk || defaultSlides.left.headline_mk)
                     : (leftSlide?.headline_text_en || defaultSlides.left.headline_en)}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                   loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -123,7 +123,7 @@ export default function Home() {
                     alt={language === 'mk'
                       ? (topRightSlide?.headline_text_mk || defaultSlides.topRight.headline_mk)
                       : (topRightSlide?.headline_text_en || defaultSlides.topRight.headline_en)}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -157,7 +157,7 @@ export default function Home() {
                     alt={language === 'mk'
                       ? (bottomRightSlide?.headline_text_mk || defaultSlides.bottomRight.headline_mk)
                       : (bottomRightSlide?.headline_text_en || defaultSlides.bottomRight.headline_en)}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />

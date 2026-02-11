@@ -203,6 +203,8 @@ export default function TestimonialsSection() {
                             animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
                             animationPlayState: isPaused ? 'paused' : 'running',
                             width: 'max-content',
+                            willChange: 'transform',
+                            backfaceVisibility: 'hidden',
                         }}
                     >
                         {duplicatedTestimonials.map((testimonial, index) => (

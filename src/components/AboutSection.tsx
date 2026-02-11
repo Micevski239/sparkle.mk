@@ -89,7 +89,7 @@ export default function AboutSection() {
                                     alt={language === 'mk'
                                         ? (galleryImages[0]?.alt_mk || 'Процес на изработка')
                                         : (galleryImages[0]?.alt_en || 'Crafting process')}
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
                                 />
                             </div>
@@ -101,7 +101,7 @@ export default function AboutSection() {
                                     alt={language === 'mk'
                                         ? (galleryImages[1]?.alt_mk || 'Природни материјали')
                                         : (galleryImages[1]?.alt_en || 'Natural materials')}
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
                                 />
                             </div>
@@ -113,7 +113,7 @@ export default function AboutSection() {
                                     alt={language === 'mk'
                                         ? (galleryImages[2]?.alt_mk || 'Готови производи')
                                         : (galleryImages[2]?.alt_en || 'Finished products')}
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
                                 />
                             </div>
@@ -125,7 +125,7 @@ export default function AboutSection() {
                                     alt={language === 'mk'
                                         ? (galleryImages[3]?.alt_mk || 'Пакување со грижа')
                                         : (galleryImages[3]?.alt_en || 'Packaging with care')}
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
                                 />
                             </div>
@@ -159,7 +159,7 @@ export default function AboutSection() {
                 </div>
 
                 {/* Stats Row */}
-                <div className="bg-white/50 backdrop-blur-sm rounded-lg p-8 mb-16">
+                <div className="bg-white/80 rounded-lg p-8 mb-16">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {displayStats.map((stat, index) => (
                             <div key={stat.id || index} className="text-center">
