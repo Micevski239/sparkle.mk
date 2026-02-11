@@ -126,7 +126,7 @@ export default function About() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 to="/products"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
+                className="w-full sm:w-auto min-w-[220px] px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#68adbb' }}
               >
                 {t.about.ctaBrowse}
@@ -135,7 +135,7 @@ export default function About() {
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
+                className="w-full sm:w-auto min-w-[220px] px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#d978a2' }}
               >
                 {t.about.ctaInstagram}
@@ -144,7 +144,7 @@ export default function About() {
                 href={FACEBOOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-3 text-sm tracking-wider uppercase text-white transition-colors hover:opacity-80"
+                className="w-full sm:w-auto min-w-[220px] px-8 py-3 text-sm tracking-wider uppercase text-white text-center transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#cbc1aa' }}
               >
                 {t.about.ctaFacebook}

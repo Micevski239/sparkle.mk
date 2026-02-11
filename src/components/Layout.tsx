@@ -39,8 +39,8 @@ export default function Layout() {
       <ScrollToTop />
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white shadow-sm' : 'bg-white'
+        className={`fixed top-0 left-0 right-0 z-50 bg-white md:transition-all md:duration-300 ${
+          scrolled ? 'md:shadow-sm' : ''
         }`}
       >
         {/* Top Utilities Bar - hides on scroll (desktop) */}
@@ -216,7 +216,7 @@ export default function Layout() {
       </header>
 
       {/* Spacer for fixed header */}
-      <div className={`transition-all duration-300 ${scrolled ? 'h-12 md:h-12' : 'h-14 md:h-[104px]'}`} />
+      <div className={`h-14 md:transition-all md:duration-300 ${scrolled ? 'md:h-12' : 'md:h-[104px]'}`} />
 
       {/* Main content */}
       <main className="flex-1">
@@ -237,7 +237,7 @@ export default function Layout() {
               </p>
 
               {/* Social */}
-              <div className="mt-6 flex items-center gap-4">
+              <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <a
                   href="https://instagram.com/_sparkle.mk"
                   target="_blank"
