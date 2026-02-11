@@ -183,7 +183,7 @@ export default function TestimonialsSection() {
     }
 
     return (
-        <section ref={sectionRef} className="py-16 bg-white" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }}>
+        <section ref={sectionRef} className="py-16 bg-white">
             <style>{`
                 @keyframes testimonial-scroll {
                     from { transform: translateX(0); }

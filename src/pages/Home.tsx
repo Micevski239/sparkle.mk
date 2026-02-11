@@ -199,7 +199,7 @@ export default function Home() {
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
-      <section className="py-12 md:py-16 px-6 bg-white" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' }}>
+      <section className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="flex flex-col items-center text-center mb-10">
