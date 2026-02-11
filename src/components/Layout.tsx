@@ -244,6 +244,17 @@ export default function Layout() {
                   </Link>
                 ))}
               </div>
+              <div className="flex items-center gap-4 px-4 pt-4 mt-2 border-t border-gray-100">
+                <a href="https://instagram.com/_sparkle.mk" target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-gray-900 transition-colors" aria-label="Instagram">
+                  <InstagramIcon />
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61567398783026" target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-gray-900 transition-colors" aria-label="Facebook">
+                  <FacebookIcon />
+                </a>
+                <a href="https://www.tiktok.com/@_sparkle.mk" target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-gray-900 transition-colors" aria-label="TikTok">
+                  <TikTokIcon />
+                </a>
+              </div>
             </div>
           </nav>
         </div>
