@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useState, useEffect } from 'react';
 import { InstagramIcon, FacebookIcon } from './icons';
 import ScrollToTop from './ScrollToTop';
+import ScatteredOrnaments from './ScatteredOrnaments';
 
 export default function Layout() {
   const { language, setLanguage, t } = useLanguage();
@@ -231,12 +232,13 @@ export default function Layout() {
       <div className={`h-14 md:transition-all md:duration-300 ${scrolled ? 'md:h-12' : 'md:h-[104px]'}`} />
 
       {/* Main content */}
-      <main className="flex-1">
+      <main className="flex-1 relative">
+        <ScatteredOrnaments />
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer style={{ backgroundColor: '#004232' }}>
+      <footer className="relative z-[1]" style={{ backgroundColor: '#004232' }}>
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid md:grid-cols-12 gap-8">
             {/* Brand */}

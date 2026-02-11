@@ -8,6 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
