@@ -9,6 +9,7 @@ import { InstagramIcon, FacebookIcon, TikTokIcon } from '../components/icons';
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { language, t } = useLanguage();
+  const fadeIn = useFadeIn();
   const { product, loading, error } = useProduct(id);
 
   // Fetch related products from the same category
@@ -55,8 +56,6 @@ export default function ProductDetail() {
       : product.category.name_en
     : null;
   const isSold = product.status === 'sold';
-
-  const fadeIn = useFadeIn();
 
   return (
     <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>

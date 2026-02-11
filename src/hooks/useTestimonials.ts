@@ -16,7 +16,7 @@ export function useTestimonials() {
 
                 const { data, error: fetchError } = await supabase
                     .from('testimonials')
-                    .select('id, customer_name, customer_photo_url, customer_location_en, customer_location_mk, quote_en, quote_mk, rating, display_order, is_featured')
+                    .select('*')
                     .eq('is_active', true)
                     .order('display_order', { ascending: true });
 

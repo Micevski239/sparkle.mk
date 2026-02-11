@@ -3,6 +3,7 @@ import { Routes, Route, Outlet } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
+import { lazyWithRetry } from './lib/lazyWithRetry';
 
 const AdminLayout = lazy(() => import('./components/AdminLayout'));
 const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
@@ -17,22 +18,22 @@ function AdminAuthWrapper() {
 
 // Public pages — only Home is eager (landing page)
 import Home from './pages/Home';
-const Products = lazy(() => import('./pages/Products'));
-const ProductDetail = lazy(() => import('./pages/ProductDetail'));
-const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+const Products = lazyWithRetry(() => import('./pages/Products'), 'products');
+const ProductDetail = lazyWithRetry(() => import('./pages/ProductDetail'), 'product-detail');
+const About = lazyWithRetry(() => import('./pages/About'), 'about');
+const Contact = lazyWithRetry(() => import('./pages/Contact'), 'contact');
+const NotFound = lazyWithRetry(() => import('./pages/NotFound'), 'not-found');
 
 // Admin pages — all lazy (behind auth wall)
-const Login = lazy(() => import('./pages/admin/Login'));
-const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
-const ProductForm = lazy(() => import('./pages/admin/ProductForm'));
-const Categories = lazy(() => import('./pages/admin/Categories'));
-const HeroSlides = lazy(() => import('./pages/admin/HeroSlides'));
-const GridImages = lazy(() => import('./pages/admin/GridImages'));
-const WelcomeTiles = lazy(() => import('./pages/admin/WelcomeTiles'));
-const AboutSectionAdmin = lazy(() => import('./pages/admin/AboutSection'));
-const TestimonialsAdmin = lazy(() => import('./pages/admin/Testimonials'));
+const Login = lazyWithRetry(() => import('./pages/admin/Login'), 'admin-login');
+const Dashboard = lazyWithRetry(() => import('./pages/admin/Dashboard'), 'admin-dashboard');
+const ProductForm = lazyWithRetry(() => import('./pages/admin/ProductForm'), 'admin-product-form');
+const Categories = lazyWithRetry(() => import('./pages/admin/Categories'), 'admin-categories');
+const HeroSlides = lazyWithRetry(() => import('./pages/admin/HeroSlides'), 'admin-hero-slides');
+const GridImages = lazyWithRetry(() => import('./pages/admin/GridImages'), 'admin-grid-images');
+const WelcomeTiles = lazyWithRetry(() => import('./pages/admin/WelcomeTiles'), 'admin-welcome-tiles');
+const AboutSectionAdmin = lazyWithRetry(() => import('./pages/admin/AboutSection'), 'admin-about-section');
+const TestimonialsAdmin = lazyWithRetry(() => import('./pages/admin/Testimonials'), 'admin-testimonials');
 
 export default function App() {
   useEffect(() => {

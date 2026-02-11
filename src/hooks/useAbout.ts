@@ -17,7 +17,7 @@ export function useAboutStats() {
 
                 const { data, error: fetchError } = await supabase
                     .from('about_stats')
-                    .select('id, value, label_en, label_mk, icon, display_order')
+                    .select('*')
                     .eq('is_active', true)
                     .order('display_order', { ascending: true });
 
@@ -52,7 +52,7 @@ export function useAboutContent() {
 
                 const { data, error: fetchError } = await supabase
                     .from('about_content')
-                    .select('id, section, title_en, title_mk, subtitle_en, subtitle_mk, description_en, description_mk, image_url, founder_name, signature_url');
+                    .select('*');
 
                 if (fetchError) throw fetchError;
 
@@ -87,7 +87,7 @@ export function useAboutGallery() {
 
                 const { data, error: fetchError } = await supabase
                     .from('about_gallery')
-                    .select('id, image_url, alt_en, alt_mk, display_order')
+                    .select('*')
                     .eq('is_active', true)
                     .order('display_order', { ascending: true });
 
