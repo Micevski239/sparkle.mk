@@ -11,11 +11,16 @@ export default function Layout() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    // Only track scroll on desktop where the header collapses
+    const mql = window.matchMedia('(min-width: 768px)');
+    if (!mql.matches) return;
+
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 20);
+          const isScrolled = window.scrollY > 20;
+          setScrolled(prev => prev === isScrolled ? prev : isScrolled);
           ticking = false;
         });
         ticking = true;
@@ -46,13 +51,12 @@ export default function Layout() {
       <ScrollToTop />
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-white md:transition-all md:duration-300 will-change-transform ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-white md:transition-shadow md:duration-300 ${
           scrolled ? 'md:shadow-sm' : ''
         }`}
-        style={{ backfaceVisibility: 'hidden' }}
       >
         {/* Top Utilities Bar - hides on scroll (desktop) */}
-        <div className={`hidden md:block border-b border-gray-100 transition-all duration-300 overflow-hidden ${
+        <div className={`hidden md:block border-b border-gray-100 md:transition-[max-height,opacity] md:duration-300 overflow-hidden ${
           scrolled ? 'max-h-0 opacity-0' : 'max-h-20 opacity-100'
         }`}>
           <div className="max-w-7xl mx-auto px-6">

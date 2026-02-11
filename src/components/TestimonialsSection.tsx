@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTestimonials } from '../hooks/useTestimonials';
 import { Testimonial } from '../types';
@@ -125,6 +125,20 @@ export default function TestimonialsSection() {
     const { language } = useLanguage();
     const { testimonials, loading } = useTestimonials();
     const [isPaused, setIsPaused] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const sectionRef = useRef<HTMLElement>(null);
+
+    // Pause animation when section is off-screen
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsVisible(entry.isIntersecting),
+            { rootMargin: '100px' }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     // Use fetched testimonials or fallback to defaults
     const displayTestimonials = testimonials.length > 0
@@ -169,7 +183,7 @@ export default function TestimonialsSection() {
     }
 
     return (
-        <section className="py-16 bg-white" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }}>
+        <section ref={sectionRef} className="py-16 bg-white" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }}>
             <style>{`
                 @keyframes testimonial-scroll {
                     from { transform: translateX(0); }
@@ -193,18 +207,14 @@ export default function TestimonialsSection() {
                     className="relative px-4 sm:px-6 overflow-hidden"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
-                    onTouchStart={() => setIsPaused(true)}
-                    onTouchEnd={() => setIsPaused(false)}
                 >
                     {/* Scrolling Container - CSS animation driven */}
                     <div
                         className="flex gap-4 sm:gap-6 pb-4"
                         style={{
                             animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
-                            animationPlayState: isPaused ? 'paused' : 'running',
+                            animationPlayState: isPaused || !isVisible ? 'paused' : 'running',
                             width: 'max-content',
-                            willChange: 'transform',
-                            backfaceVisibility: 'hidden',
                         }}
                     >
                         {duplicatedTestimonials.map((testimonial, index) => (
