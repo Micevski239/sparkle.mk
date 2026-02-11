@@ -1,9 +1,10 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { InstagramIcon, FacebookIcon } from './icons';
 import ScrollToTop from './ScrollToTop';
-import ScatteredOrnaments from './ScatteredOrnaments';
+
+const ScatteredOrnaments = lazy(() => import('./ScatteredOrnaments'));
 
 export default function Layout() {
   const { language, setLanguage, t } = useLanguage();
@@ -233,7 +234,9 @@ export default function Layout() {
 
       {/* Main content */}
       <main className="flex-1 relative">
-        <ScatteredOrnaments />
+        <Suspense fallback={null}>
+          <ScatteredOrnaments />
+        </Suspense>
         <Outlet />
       </main>
 

@@ -1,11 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
 import { formatPrice } from '../lib/utils';
-import WelcomeSection from '../components/WelcomeSection';
-import AboutSection from '../components/AboutSection';
-import TestimonialsSection from '../components/TestimonialsSection';
+
+const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
+const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
+const AboutSection = lazy(() => import('../components/AboutSection'));
 
 export default function Home() {
   const { language } = useLanguage();
@@ -189,12 +191,16 @@ export default function Home() {
       {/* ============================================
           WELCOME SECTION + CATEGORY TILES
           ============================================ */}
-      <WelcomeSection />
+      <Suspense fallback={<div className="py-16" />}>
+        <WelcomeSection />
+      </Suspense>
 
       {/* ============================================
           TESTIMONIALS SECTION
           ============================================ */}
-      <TestimonialsSection />
+      <Suspense fallback={<div className="py-16" />}>
+        <TestimonialsSection />
+      </Suspense>
 
       {/* ============================================
           FEATURED PRODUCTS
@@ -207,11 +213,11 @@ export default function Home() {
               {language === 'mk' ? 'Колекција' : 'Collection'}
             </p>
             <div className="flex items-center gap-3 md:gap-4">
-              <img src="/leaf.png" alt="" className="h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
+              <img src="/leaf.png" alt="" className="hidden sm:block h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
               <h2 className="text-2xl md:text-3xl font-light tracking-[0.1em] text-gray-900 uppercase">
                 {language === 'mk' ? 'Издвоени производи' : 'Featured Products'}
               </h2>
-              <img src="/leaf.png" alt="" className="h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
+              <img src="/leaf.png" alt="" className="hidden sm:block h-6 md:h-7 w-auto opacity-80 select-none" aria-hidden="true" />
             </div>
             <Link
               to="/products"
@@ -292,7 +298,9 @@ export default function Home() {
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <AboutSection />
+      <Suspense fallback={<div className="py-20" />}>
+        <AboutSection />
+      </Suspense>
 
     </div>
   );
