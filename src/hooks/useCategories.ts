@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { Category } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 // Utility function to build category tree from flat list
 export function buildCategoryTree(categories: Category[]): Category[] {
@@ -39,6 +40,7 @@ export function buildCategoryTree(categories: Category[]): Category[] {
 }
 
 export function useCategories() {
+  const { language } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +54,7 @@ export function useCategories() {
         .from('categories')
         .select('*')
         .order('display_order', { ascending: true })
-        .order('name_en', { ascending: true });
+        .order(language === 'mk' ? 'name_mk' : 'name_en', { ascending: true });
 
       if (fetchError) throw fetchError;
       setCategories(data || []);
@@ -61,7 +63,7 @@ export function useCategories() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     fetchCategories();
@@ -72,6 +74,7 @@ export function useCategories() {
 
 // Hook to get categories with product counts and tree structure
 export function useCategoriesWithCounts() {
+  const { language } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +89,7 @@ export function useCategoriesWithCounts() {
         .from('categories')
         .select('*')
         .order('display_order', { ascending: true })
-        .order('name_en', { ascending: true });
+        .order(language === 'mk' ? 'name_mk' : 'name_en', { ascending: true });
 
       if (catError) throw catError;
 
@@ -118,7 +121,7 @@ export function useCategoriesWithCounts() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     fetchCategoriesWithCounts();

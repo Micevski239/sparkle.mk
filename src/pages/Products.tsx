@@ -88,6 +88,7 @@ export default function Products() {
     status: ['published', 'sold'],
     sortBy,
     pageSize: 12,
+    language,
   });
 
   // Calculate total product count for "All Categories"

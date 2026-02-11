@@ -12,6 +12,7 @@ interface UseProductsOptions {
   limit?: number;
   offset?: number;
   sortBy?: SortOption;
+  language?: 'mk' | 'en';
 }
 
 export function useProducts(options: UseProductsOptions = {}) {
@@ -41,7 +42,7 @@ export function useProducts(options: UseProductsOptions = {}) {
           query = query.order('price', { ascending: false });
           break;
         case 'name':
-          query = query.order('title_en', { ascending: true });
+          query = query.order(options.language === 'mk' ? 'title_mk' : 'title_en', { ascending: true });
           break;
         case 'newest':
         default:
@@ -89,7 +90,7 @@ export function useProducts(options: UseProductsOptions = {}) {
     } finally {
       setLoading(false);
     }
-  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.includeCategory, options.isBestSeller, options.isOnSale, options.limit, options.offset, options.sortBy]);
+  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.includeCategory, options.isBestSeller, options.isOnSale, options.limit, options.offset, options.sortBy, options.language]);
 
   useEffect(() => {
     fetchProducts();
@@ -105,6 +106,7 @@ interface UsePaginatedProductsOptions {
   status?: ProductStatus | ProductStatus[];
   sortBy?: SortOption;
   pageSize?: number;
+  language?: 'mk' | 'en';
 }
 
 export function usePaginatedProducts(options: UsePaginatedProductsOptions = {}) {
@@ -144,7 +146,7 @@ export function usePaginatedProducts(options: UsePaginatedProductsOptions = {}) 
           query = query.order('price', { ascending: false });
           break;
         case 'name':
-          query = query.order('title_en', { ascending: true });
+          query = query.order(options.language === 'mk' ? 'title_mk' : 'title_en', { ascending: true });
           break;
         case 'newest':
         default:
@@ -190,7 +192,7 @@ export function usePaginatedProducts(options: UsePaginatedProductsOptions = {}) 
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.sortBy, pageSize]);
+  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.sortBy, pageSize, options.language]);
 
   const loadMore = useCallback(() => {
     if (!loadingMore && hasMore) {

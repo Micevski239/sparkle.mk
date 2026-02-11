@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useState, useEffect } from 'react';
 import { InstagramIcon, FacebookIcon } from './icons';
+import ScrollToTop from './ScrollToTop';
 
 export default function Layout() {
   const { language, setLanguage, t } = useLanguage();
@@ -35,6 +36,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      <ScrollToTop />
       {/* Header */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -128,28 +130,30 @@ export default function Layout() {
         <div className="md:hidden border-b border-gray-100">
           <div className="px-6">
             <div className="flex items-center justify-between h-14">
-              {/* Left - Language */}
+              {/* Left - Hamburger menu */}
               <button
-                onClick={() => setLanguage(language === 'mk' ? 'en' : 'mk')}
-                className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 transition-colors"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                aria-label="Toggle menu"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {mobileMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
                 </svg>
-                <span className="uppercase tracking-wide">{language}</span>
               </button>
 
-              {/* Center - Logo (fades on scroll) */}
+              {/* Center - Logo */}
               <Link
                 to="/"
-                className={`absolute left-1/2 transform -translate-x-1/2 text-lg font-light tracking-[0.2em] text-gray-900 transition-opacity duration-300 ${
-                  scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                }`}
+                className="absolute left-1/2 transform -translate-x-1/2 text-lg font-light tracking-[0.2em] text-gray-900"
               >
                 sparkle.mk
               </Link>
 
-              {/* Right - Icons */}
+              {/* Right - Icons + Language */}
               <div className="flex items-center gap-1">
                 <a
                   href="https://instagram.com/_sparkle.mk"
@@ -170,17 +174,13 @@ export default function Layout() {
                   <FacebookIcon />
                 </a>
                 <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
-                  aria-label="Toggle menu"
+                  onClick={() => setLanguage(language === 'mk' ? 'en' : 'mk')}
+                  className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 transition-colors p-2"
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    {mobileMenuOpen ? (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-                    ) : (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-                    )}
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                   </svg>
+                  <span className="uppercase tracking-wide">{language}</span>
                 </button>
               </div>
             </div>
