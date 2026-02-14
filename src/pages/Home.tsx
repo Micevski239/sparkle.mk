@@ -38,6 +38,7 @@ function FadeInSection({ children }: { children: ReactNode }) {
 }
 
 const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
+const InstagramPromoSection = lazy(() => import('../components/InstagramPromoSection'));
 const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
 const AboutSection = lazy(() => import('../components/AboutSection'));
 
@@ -226,6 +227,15 @@ export default function Home() {
       <FadeInSection>
         <Suspense fallback={<div className="py-16" />}>
           <WelcomeSection />
+        </Suspense>
+      </FadeInSection>
+
+      {/* ============================================
+          INSTAGRAM PROMO SECTION
+          ============================================ */}
+      <FadeInSection>
+        <Suspense fallback={<div className="py-16" />}>
+          <InstagramPromoSection />
         </Suspense>
       </FadeInSection>
 

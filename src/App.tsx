@@ -34,6 +34,7 @@ const GridImages = lazyWithRetry(() => import('./pages/admin/GridImages'), 'admi
 const WelcomeTiles = lazyWithRetry(() => import('./pages/admin/WelcomeTiles'), 'admin-welcome-tiles');
 const AboutSectionAdmin = lazyWithRetry(() => import('./pages/admin/AboutSection'), 'admin-about-section');
 const TestimonialsAdmin = lazyWithRetry(() => import('./pages/admin/Testimonials'), 'admin-testimonials');
+const InstagramPromoAdmin = lazyWithRetry(() => import('./pages/admin/InstagramPromo'), 'admin-instagram-promo');
 
 export default function App() {
   useEffect(() => {
@@ -73,6 +74,7 @@ export default function App() {
             <Route path="/admin/welcome-tiles" element={<WelcomeTiles />} />
             <Route path="/admin/about-section" element={<AboutSectionAdmin />} />
             <Route path="/admin/testimonials" element={<TestimonialsAdmin />} />
+            <Route path="/admin/instagram-promo" element={<InstagramPromoAdmin />} />
           </Route>
         </Route>
       </Route>

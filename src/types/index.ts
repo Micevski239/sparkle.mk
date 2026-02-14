@@ -116,6 +116,27 @@ export interface AboutGalleryImage {
   created_at: string;
 }
 
+// Instagram Promo Types
+export interface InstagramPromo {
+  id: string;
+  subtitle_en: string | null;
+  subtitle_mk: string | null;
+  title_en: string | null;
+  title_mk: string | null;
+  description_en: string | null;
+  description_mk: string | null;
+  button1_text_en: string | null;
+  button1_text_mk: string | null;
+  button1_link: string | null;
+  button2_text_en: string | null;
+  button2_text_mk: string | null;
+  button2_link: string | null;
+  instagram_url: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // Testimonials Types
 export interface Testimonial {
   id: string;
