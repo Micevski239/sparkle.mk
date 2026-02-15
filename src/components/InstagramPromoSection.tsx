@@ -15,7 +15,7 @@ export default function InstagramPromoSection() {
 
     return (
         <section className="py-12 md:py-20 px-6 bg-white">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-5xl mx-auto">
                 <div
                     ref={containerRef}
                     className="embedsocial-hashtag"
