@@ -125,7 +125,7 @@ export default function TestimonialsSection() {
     const { language } = useLanguage();
     const { testimonials, loading } = useTestimonials();
     const [isPaused, setIsPaused] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     const sectionRef = useRef<HTMLElement>(null);
 
     // Pause animation when section is off-screen
