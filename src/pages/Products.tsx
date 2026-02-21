@@ -82,7 +82,6 @@ export default function Products() {
     products,
     loading: productsLoading,
     loadingMore,
-    totalCount,
     hasMore,
     loadMore,
   } = usePaginatedProducts({
@@ -268,7 +267,7 @@ export default function Products() {
           <div className="flex-1 min-w-0">
             {/* Grid controls */}
             <ProductGridControls
-              totalCount={searchQuery ? filteredProducts.length : totalCount}
+              totalCount={searchQuery ? filteredProducts.length : products.length}
               sortBy={sortBy}
               onSortChange={handleSortChange}
               viewMode={viewMode}
@@ -438,7 +437,6 @@ export default function Products() {
             {!searchQuery && hasMore && (
               <LoadMoreButton
                 currentCount={products.length}
-                totalCount={totalCount}
                 loading={loadingMore}
                 onLoadMore={loadMore}
               />

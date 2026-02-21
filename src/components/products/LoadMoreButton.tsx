@@ -2,30 +2,23 @@ import { useLanguage } from '../../context/LanguageContext';
 
 interface LoadMoreButtonProps {
   currentCount: number;
-  totalCount: number;
   loading: boolean;
   onLoadMore: () => void;
 }
 
 export default function LoadMoreButton({
   currentCount,
-  totalCount,
   loading,
   onLoadMore,
 }: LoadMoreButtonProps) {
   const { language } = useLanguage();
-  const remaining = totalCount - currentCount;
-
-  if (remaining <= 0) {
-    return null;
-  }
 
   return (
     <div className="flex flex-col items-center gap-3 mt-12">
       <p className="text-sm text-gray-500">
         {language === 'mk'
-          ? `Прикажани ${currentCount} од ${totalCount} производи`
-          : `Showing ${currentCount} of ${totalCount} products`}
+          ? `Прикажани ${currentCount} производи`
+          : `Showing ${currentCount} products`}
       </p>
       <button
         onClick={onLoadMore}
@@ -56,10 +49,7 @@ export default function LoadMoreButton({
             {language === 'mk' ? 'Вчитување...' : 'Loading...'}
           </>
         ) : (
-          <>
-            {language === 'mk' ? 'Вчитај уште' : 'Load More'}
-            <span className="text-white/70">({remaining})</span>
-          </>
+          language === 'mk' ? 'Вчитај уште' : 'Load More'
         )}
       </button>
     </div>
