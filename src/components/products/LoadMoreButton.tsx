@@ -14,7 +14,7 @@ export default function LoadMoreButton({
   const { language } = useLanguage();
 
   return (
-    <div className="flex flex-col items-center gap-3 mt-12">
+    <div className="flex flex-col items-center gap-3 mt-12 relative z-[1]">
       <p className="text-sm text-gray-500">
         {language === 'mk'
           ? `Прикажани ${currentCount} производи`

@@ -149,7 +149,7 @@ export default function ProductDetail() {
 
             {/* CTA */}
             {!isSold && (
-              <div className="mt-auto pt-8 border-t border-gray-100">
+              <div className="mt-auto pt-8 border-t border-gray-100 relative z-[1]">
                 <p className="text-sm text-gray-500 mb-4">
                   {language === 'mk'
                     ? 'Заинтересирани за овој производ?'
