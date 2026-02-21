@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -7,7 +8,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default memo(function ProductCard({ product }: ProductCardProps) {
   const { language, t } = useLanguage();
   const title = language === 'mk' ? product.title_mk : product.title_en;
   const isSold = product.status === 'sold';
@@ -70,4 +71,4 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
     </Link>
   );
-}
+});

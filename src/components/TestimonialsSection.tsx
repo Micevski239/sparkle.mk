@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTestimonials } from '../hooks/useTestimonials';
 import { Testimonial } from '../types';
@@ -148,8 +148,16 @@ export default function TestimonialsSection() {
     // Duplicate for seamless loop
     const duplicatedTestimonials = [...displayTestimonials, ...displayTestimonials];
 
-    const cardWidth = 320 + 24; // card width + gap
-    const totalWidth = displayTestimonials.length * cardWidth;
+    const animationStyle = useMemo(() => {
+        const cardWidth = 320 + 24; // card width + gap
+        const totalWidth = displayTestimonials.length * cardWidth;
+        return {
+            animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
+            animationPlayState: (isPaused || !isVisible ? 'paused' : 'running') as 'paused' | 'running',
+            width: 'max-content',
+            '--scroll-distance': `-${totalWidth}px`,
+        } as React.CSSProperties;
+    }, [displayTestimonials.length, isPaused, isVisible]);
 
     if (loading) {
         return (
@@ -184,12 +192,6 @@ export default function TestimonialsSection() {
 
     return (
         <section ref={sectionRef} className="py-16 bg-white">
-            <style>{`
-                @keyframes testimonial-scroll {
-                    from { transform: translateX(0); }
-                    to { transform: translateX(-${totalWidth}px); }
-                }
-            `}</style>
             <div className="w-full">
                 {/* Section Header */}
                 <div className="flex flex-col items-center text-center mb-10 px-6">
@@ -211,11 +213,7 @@ export default function TestimonialsSection() {
                     {/* Scrolling Container - CSS animation driven */}
                     <div
                         className="flex gap-4 sm:gap-6 pb-4"
-                        style={{
-                            animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
-                            animationPlayState: isPaused || !isVisible ? 'paused' : 'running',
-                            width: 'max-content',
-                        }}
+                        style={animationStyle}
                     >
                         {duplicatedTestimonials.map((testimonial, index) => (
                             <div key={`${testimonial.id || index}-${index}`} className="flex-shrink-0">

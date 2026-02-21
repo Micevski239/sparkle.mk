@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAdminInstagramPromo, useInstagramPromoMutations } from '../../hooks/useInstagramPromo';
+import { isValidUrl } from '../../lib/utils';
 
 export default function InstagramPromo() {
     const { promo, loading, refetch } = useAdminInstagramPromo();
@@ -52,6 +53,17 @@ export default function InstagramPromo() {
 
         setSuccess(false);
         setError(null);
+
+        const linksToValidate = [
+            { value: form.button1_link, label: 'Button 1 link' },
+            { value: form.button2_link, label: 'Button 2 link' },
+        ];
+        for (const link of linksToValidate) {
+            if (link.value && !isValidUrl(link.value)) {
+                setError(`${link.label} must be a relative path or a valid http/https URL`);
+                return;
+            }
+        }
 
         const { error: updateError } = await updatePromo(promo.id, form);
 

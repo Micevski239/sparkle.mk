@@ -34,24 +34,31 @@ export default function HeroCarousel() {
 
   return (
     <section className="relative h-[60vh] w-full overflow-hidden">
-      {/* Slide Images */}
+      {/* Slide Images — only render active + next to reduce image downloads */}
       <div className="relative h-full">
-        {slides.map((slideItem, index) => (
-          <div
-            key={slideItem.id}
-            className={`absolute inset-0 transition-opacity duration-1000 bg-white ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
+        {slides.map((slideItem, index) => {
+          const nextSlide = (currentSlide + 1) % slides.length;
+          const prevSlide = (currentSlide - 1 + slides.length) % slides.length;
+          const shouldRender = index === currentSlide || index === nextSlide || index === prevSlide;
+          if (!shouldRender) return null;
+
+          return (
             <div
-              className="absolute inset-0 bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${slideItem.image_url})`, backgroundSize: 'contain' }}
-              aria-hidden
-            />
-            {/* Overlay for text readability */}
-            <div className="absolute inset-0 bg-black/10" />
-          </div>
-        ))}
+              key={slideItem.id}
+              className={`absolute inset-0 transition-opacity duration-1000 bg-white ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <div
+                className="absolute inset-0 bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${slideItem.image_url})`, backgroundSize: 'contain' }}
+                aria-hidden
+              />
+              {/* Overlay for text readability */}
+              <div className="absolute inset-0 bg-black/10" />
+            </div>
+          );
+        })}
       </div>
 
       {/* Content Overlay */}

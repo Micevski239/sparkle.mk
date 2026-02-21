@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useAdminHeroSlides, useHeroSlideMutations } from '../../hooks/useHomepage';
 import { HomepageHeroSlide } from '../../types';
+import { isValidUrl } from '../../lib/utils';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
@@ -79,6 +80,11 @@ export default function HeroSlides() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
+
+        if (formData.button_link && !isValidUrl(formData.button_link)) {
+            setError('Button link must be a relative path (e.g. /products) or a valid http/https URL');
+            return;
+        }
 
         let imageUrl = formData.image_url;
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { validateImageFile } from '../lib/utils';
 import { Product, ProductStatus, SortOption } from '../types';
 
 interface UseProductsOptions {
@@ -328,6 +329,12 @@ export function useProductMutations() {
   };
 
   const uploadImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setError(validationError);
+      return { url: null, error: validationError };
+    }
+
     try {
       setLoading(true);
       setError(null);

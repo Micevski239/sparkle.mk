@@ -58,8 +58,8 @@ export default function Layout() {
         }`}
       >
         {/* Top Utilities Bar - hides on scroll (desktop) */}
-        <div className={`hidden md:block border-b border-gray-100 md:transition-[max-height,opacity] md:duration-300 overflow-hidden ${
-          scrolled ? 'max-h-0 opacity-0' : 'max-h-20 opacity-100'
+        <div className={`hidden md:block border-b border-gray-100 md:transition-[transform,opacity] md:duration-300 ${
+          scrolled ? '-translate-y-full opacity-0 absolute left-0 right-0' : 'translate-y-0 opacity-100'
         }`}>
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between h-14">
@@ -223,11 +223,11 @@ export default function Layout() {
 
         {/* Mobile Navigation Dropdown */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          className={`md:hidden overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-in-out grid ${
+            mobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
           }`}
         >
-          <nav className="bg-white border-b border-gray-100">
+          <nav className="bg-white border-b border-gray-100 min-h-0 overflow-hidden">
             <div className="px-6 py-4">
               <div className="flex flex-col gap-1">
                 {navLinks.map((link) => (
@@ -260,8 +260,8 @@ export default function Layout() {
         </div>
       </header>
 
-      {/* Spacer for fixed header */}
-      <div className={`h-14 md:transition-all md:duration-300 ${scrolled ? 'md:h-12' : 'md:h-[104px]'}`} />
+      {/* Spacer for fixed header — fixed height prevents CLS */}
+      <div className="h-14 md:h-[104px]" />
 
       {/* Main content */}
       <main className="flex-1 relative">

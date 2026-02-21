@@ -1,4 +1,13 @@
 -- Sparkle MK Database Schema
+--
+-- SECURITY: Before deploying, you MUST disable public signup in:
+--   Supabase Dashboard > Authentication > Settings > "Enable sign ups" → OFF
+--
+-- All "admin" RLS policies use auth.role() = 'authenticated'. If public signup
+-- is left enabled, ANY user who signs up gets full write access to all tables.
+-- For a single-admin app, disabling signup is the simplest fix. For multi-admin,
+-- replace auth.role() = 'authenticated' with:
+--   auth.uid() IN (SELECT id FROM admin_users)
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -20,6 +29,7 @@ CREATE TABLE IF NOT EXISTS products (
   description_mk TEXT,
   description_en TEXT,
   price NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  sale_price NUMERIC(10, 2),
   image_url TEXT,
   category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'sold')),

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { validateImageFile } from '../lib/utils';
 import { HomepageHeroSlide, HomepageGridImage, WelcomeTile } from '../types';
 
 // Public hooks for frontend
@@ -202,6 +203,12 @@ export function useHeroSlideMutations() {
     };
 
     const uploadImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setError(validationError);
+            return { url: null, error: validationError };
+        }
+
         try {
             setLoading(true);
             setError(null);
@@ -312,6 +319,12 @@ export function useGridImageMutations() {
     };
 
     const uploadImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setError(validationError);
+            return { url: null, error: validationError };
+        }
+
         try {
             setLoading(true);
             setError(null);
@@ -487,6 +500,12 @@ export function useWelcomeTileMutations() {
     };
 
     const uploadImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setError(validationError);
+            return { url: null, error: validationError };
+        }
+
         try {
             setLoading(true);
             setError(null);

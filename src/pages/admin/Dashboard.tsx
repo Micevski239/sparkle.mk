@@ -8,12 +8,13 @@ import Modal from '../../components/ui/Modal';
 import { formatPrice } from '../../lib/utils';
 
 export default function Dashboard() {
-  const { products, loading, refetch } = useProducts({ includeCategory: true });
+  const { products, loading, refetch } = useProducts({ includeCategory: true, limit: 100 });
   const { categories } = useCategories();
   const { deleteProduct, updateProduct } = useProductMutations();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const handleDeleteClick = (product: Product) => {
     setProductToDelete(product);
@@ -24,9 +25,12 @@ export default function Dashboard() {
     if (!productToDelete) return;
 
     setActionLoading(true);
+    setActionError(null);
     const { error } = await deleteProduct(productToDelete.id);
 
-    if (!error) {
+    if (error) {
+      setActionError(error);
+    } else {
       refetch();
     }
 
@@ -37,8 +41,13 @@ export default function Dashboard() {
 
   const handleStatusChange = async (product: Product, newStatus: ProductStatus) => {
     setActionLoading(true);
-    await updateProduct(product.id, { status: newStatus });
-    refetch();
+    setActionError(null);
+    const { error } = await updateProduct(product.id, { status: newStatus });
+    if (error) {
+      setActionError(error);
+    } else {
+      refetch();
+    }
     setActionLoading(false);
   };
 
@@ -56,6 +65,13 @@ export default function Dashboard() {
           <Button>+ Add Product</Button>
         </Link>
       </div>
+
+      {actionError && (
+        <div className="mb-4 bg-red-1/10 border border-red-1/20 text-red-1 px-4 py-3 rounded-md text-sm flex items-center justify-between">
+          <span>{actionError}</span>
+          <button onClick={() => setActionError(null)} className="ml-4 font-bold">&times;</button>
+        </div>
+      )}
 
       {/* Products Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">

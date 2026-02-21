@@ -39,17 +39,28 @@ const InstagramPromoAdmin = lazyWithRetry(() => import('./pages/admin/InstagramP
 export default function App() {
   useEffect(() => {
     const splash = document.getElementById('splash');
-    if (splash) {
-      setTimeout(() => {
-        splash.style.opacity = '0';
-        setTimeout(() => splash.remove(), 800);
-      }, 400);
+    if (!splash) return;
+
+    const dismiss = () => {
+      splash.style.opacity = '0';
+      setTimeout(() => splash.remove(), 800);
+    };
+
+    // Dismiss splash once the main thread is idle (or after 1s max)
+    if ('requestIdleCallback' in window) {
+      (window as Window).requestIdleCallback(dismiss, { timeout: 1000 });
+    } else {
+      setTimeout(dismiss, 100);
     }
   }, []);
 
   return (
     <ErrorBoundary>
-    <Suspense fallback={null}>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+      </div>
+    }>
     <Routes>
       {/* Public routes */}
       <Route element={<Layout />}>

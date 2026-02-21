@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { validateImageFile } from '../lib/utils';
 import { AboutStat, AboutContent, AboutGalleryImage } from '../types';
 
 // Public hooks for frontend
@@ -309,6 +310,12 @@ export function useAboutContentMutations() {
     };
 
     const uploadImage = async (file: File, folder: string = 'about'): Promise<{ url: string | null; error: string | null }> => {
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setError(validationError);
+            return { url: null, error: validationError };
+        }
+
         try {
             setLoading(true);
             setError(null);
@@ -417,6 +424,12 @@ export function useAboutGalleryMutations() {
     };
 
     const uploadImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setError(validationError);
+            return { url: null, error: validationError };
+        }
+
         try {
             setLoading(true);
             setError(null);

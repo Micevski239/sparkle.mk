@@ -36,6 +36,12 @@ body {
   overflow: hidden;
 }
 
+/* Testimonial marquee — uses CSS custom property for dynamic distance */
+@keyframes testimonial-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--scroll-distance)); }
+}
+
 /* Prose styles for About page */
 .prose p {
   margin-bottom: 1rem;

@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 const images = [
   '/white.webp',
   '/star.webp',
@@ -64,9 +66,25 @@ const ornaments: { src: string; top: string; left?: string; right?: string; size
 ];
 
 export default function ScatteredOrnaments() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia('(min-width: 768px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(!e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+
+  // On mobile, render every 3rd ornament (~11 instead of 34)
+  const visibleOrnaments = isMobile
+    ? ornaments.filter((_, i) => i % 3 === 0)
+    : ornaments;
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {ornaments.map((o, i) => (
+      {visibleOrnaments.map((o, i) => (
         <img
           key={i}
           src={o.src}

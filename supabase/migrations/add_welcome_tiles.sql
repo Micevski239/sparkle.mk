@@ -21,3 +21,14 @@ INSERT INTO welcome_tiles (label_en, label_mk, image_url, bg_color, link_url, di
   ('Home Decor', 'Декорација', 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=400&h=400&fit=crop', '#abbf80', '/products', 1),
   ('Kids & Babies', 'Деца и бебиња', 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400&h=400&fit=crop', '#e3ded1', '/products', 2),
   ('Kitchen', 'Кујна', 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop', '#e7be45', '/products', 3);
+
+-- Enable Row Level Security
+ALTER TABLE welcome_tiles ENABLE ROW LEVEL SECURITY;
+
+-- Public can view active welcome tiles
+CREATE POLICY "Public can view active welcome tiles" ON welcome_tiles
+  FOR SELECT USING (is_active = true);
+
+-- Authenticated users (admin) can manage welcome tiles
+CREATE POLICY "Admin can manage welcome tiles" ON welcome_tiles
+  FOR ALL USING (auth.role() = 'authenticated');

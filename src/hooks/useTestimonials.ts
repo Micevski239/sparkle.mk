@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { validateImageFile } from '../lib/utils';
 import { Testimonial } from '../types';
 
 // Public hook for frontend - fetches active testimonials
@@ -139,6 +140,12 @@ export function useTestimonialMutations() {
     };
 
     const uploadPhoto = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setError(validationError);
+            return { url: null, error: validationError };
+        }
+
         try {
             setLoading(true);
             setError(null);
