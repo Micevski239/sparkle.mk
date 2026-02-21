@@ -1,110 +1,62 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { validateImageFile } from '../lib/utils';
 import { AboutStat, AboutContent, AboutGalleryImage } from '../types';
 
-// Public hooks for frontend
+// Public hooks for frontend — powered by TanStack Query
 
 export function useAboutStats() {
-    const [stats, setStats] = useState<AboutStat[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: stats = [], isLoading: loading, error } = useQuery({
+        queryKey: ['about-stats'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('about_stats')
+                .select('id,value,label_en,label_mk,display_order')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+            if (error) throw error;
+            return (data as unknown as AboutStat[]) || [];
+        },
+    });
 
-    useEffect(() => {
-        async function fetchStats() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('about_stats')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('display_order', { ascending: true });
-
-                if (fetchError) throw fetchError;
-                setStats((data as unknown as AboutStat[]) || []);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch about stats');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchStats();
-    }, []);
-
-    return { stats, loading, error };
+    return { stats, loading, error: error?.message ?? null };
 }
 
 export function useAboutContent() {
-    const [content, setContent] = useState<{ main: AboutContent | null; quote: AboutContent | null }>({
-        main: null,
-        quote: null
+    const { data: content = { main: null, quote: null }, isLoading: loading, error } = useQuery({
+        queryKey: ['about-content'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('about_content')
+                .select('id,section,title_en,title_mk,subtitle_en,subtitle_mk,description_en,description_mk,founder_name,signature_url');
+            if (error) throw error;
+            const contentData = data as unknown as AboutContent[];
+            return {
+                main: contentData?.find(c => c.section === 'main') || null,
+                quote: contentData?.find(c => c.section === 'quote') || null,
+            };
+        },
     });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        async function fetchContent() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('about_content')
-                    .select('*');
-
-                if (fetchError) throw fetchError;
-
-                const contentData = data as unknown as AboutContent[];
-                setContent({
-                    main: contentData?.find(c => c.section === 'main') || null,
-                    quote: contentData?.find(c => c.section === 'quote') || null
-                });
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch about content');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchContent();
-    }, []);
-
-    return { content, loading, error };
+    return { content, loading, error: error?.message ?? null };
 }
 
 export function useAboutGallery() {
-    const [images, setImages] = useState<AboutGalleryImage[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: images = [], isLoading: loading, error } = useQuery({
+        queryKey: ['about-gallery'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('about_gallery')
+                .select('id,image_url,alt_en,alt_mk,display_order')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+            if (error) throw error;
+            return (data as unknown as AboutGalleryImage[]) || [];
+        },
+    });
 
-    useEffect(() => {
-        async function fetchImages() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('about_gallery')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('display_order', { ascending: true });
-
-                if (fetchError) throw fetchError;
-                setImages((data as unknown as AboutGalleryImage[]) || []);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch about gallery');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchImages();
-    }, []);
-
-    return { images, loading, error };
+    return { images, loading, error: error?.message ?? null };
 }
 
 // Admin hooks

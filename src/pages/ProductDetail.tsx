@@ -160,7 +160,7 @@ export default function ProductDetail() {
                     href="https://instagram.com/_sparkle.mk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
+                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-colors"
                   >
                     <InstagramIcon className="w-5 h-5 mr-3" />
                     {t.product.orderOnInstagram}
@@ -169,7 +169,7 @@ export default function ProductDetail() {
                     href="https://www.facebook.com/profile.php?id=61567398783026"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
+                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-colors"
                   >
                     <FacebookIcon className="w-5 h-5 mr-3" />
                     {t.product.orderOnFacebook}
@@ -178,7 +178,7 @@ export default function ProductDetail() {
                     href="https://www.tiktok.com/@_sparkle.mk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-all"
+                    className="inline-flex items-center px-8 py-4 bg-gray-900 text-white text-sm tracking-wide hover:bg-gray-800 transition-colors"
                   >
                     <TikTokIcon className="w-5 h-5 mr-3" />
                     {t.product.watchOnTikTok}

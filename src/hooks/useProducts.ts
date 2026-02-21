@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { validateImageFile } from '../lib/utils';
 import { Product, ProductStatus, SortOption } from '../types';
@@ -16,88 +17,92 @@ interface UseProductsOptions {
   language?: 'mk' | 'en';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyProductSort(query: any, sortBy?: SortOption, language?: string) {
+  switch (sortBy) {
+    case 'on_sale':
+      return query.order('is_on_sale', { ascending: false, nullsFirst: false })
+        .order('created_at', { ascending: false });
+    case 'price_asc':
+      return query.order('price', { ascending: true });
+    case 'price_desc':
+      return query.order('price', { ascending: false });
+    case 'name':
+      return query.order(language === 'mk' ? 'title_mk' : 'title_en', { ascending: true });
+    case 'newest':
+    default:
+      return query.order('created_at', { ascending: false });
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyProductFilters(
+  query: any,
+  options: { categoryId?: string | null; categoryIds?: string[]; status?: ProductStatus | ProductStatus[]; isBestSeller?: boolean; isOnSale?: boolean }
+) {
+  let q = query;
+  if (options.categoryId) {
+    q = q.eq('category_id', options.categoryId);
+  }
+  if (options.categoryIds?.length) {
+    q = q.in('category_id', options.categoryIds);
+  }
+  if (options.status) {
+    if (Array.isArray(options.status)) {
+      q = q.in('status', options.status);
+    } else {
+      q = q.eq('status', options.status);
+    }
+  }
+  if (options.isBestSeller !== undefined) {
+    q = q.eq('is_best_seller', options.isBestSeller);
+  }
+  if (options.isOnSale !== undefined) {
+    q = q.eq('is_on_sale', options.isOnSale);
+  }
+  return q;
+}
+
 export function useProducts(options: UseProductsOptions = {}) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryKey = [
+    'products',
+    options.categoryId,
+    options.categoryIds,
+    options.status,
+    options.includeCategory,
+    options.isBestSeller,
+    options.isOnSale,
+    options.limit,
+    options.offset,
+    options.sortBy,
+    options.language,
+  ];
 
-  const fetchProducts = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
+  const { data: products = [], isLoading: loading, error, refetch } = useQuery({
+    queryKey,
+    queryFn: async () => {
       let query = supabase
         .from('products')
-        .select(options.includeCategory ? '*, category:categories(*)' : '*');
+        .select(options.includeCategory
+          ? 'id,title_mk,title_en,price,sale_price,image_url,status,is_best_seller,is_on_sale,category_id,created_at,category:categories(id,name_mk,name_en,slug)'
+          : 'id,title_mk,title_en,price,sale_price,image_url,status,is_best_seller,is_on_sale,category_id,created_at');
 
-      // Apply sorting
-      switch (options.sortBy) {
-        case 'on_sale':
-          query = query.order('is_on_sale', { ascending: false, nullsFirst: false })
-            .order('created_at', { ascending: false });
-          break;
-        case 'price_asc':
-          query = query.order('price', { ascending: true });
-          break;
-        case 'price_desc':
-          query = query.order('price', { ascending: false });
-          break;
-        case 'name':
-          query = query.order(options.language === 'mk' ? 'title_mk' : 'title_en', { ascending: true });
-          break;
-        case 'newest':
-        default:
-          query = query.order('created_at', { ascending: false });
-          break;
-      }
+      query = applyProductSort(query, options.sortBy, options.language);
+      query = applyProductFilters(query, options);
 
-      if (options.categoryId) {
-        query = query.eq('category_id', options.categoryId);
-      }
-
-      if (options.categoryIds?.length) {
-        query = query.in('category_id', options.categoryIds);
-      }
-
-      if (options.status) {
-        if (Array.isArray(options.status)) {
-          query = query.in('status', options.status);
-        } else {
-          query = query.eq('status', options.status);
-        }
-      }
-
-      if (options.isBestSeller !== undefined) {
-        query = query.eq('is_best_seller', options.isBestSeller);
-      }
-
-      if (options.isOnSale !== undefined) {
-        query = query.eq('is_on_sale', options.isOnSale);
-      }
-
-      // Apply pagination
       if (options.offset !== undefined && options.limit !== undefined) {
         query = query.range(options.offset, options.offset + options.limit - 1);
       } else if (options.limit) {
         query = query.limit(options.limit);
       }
 
-      const { data, error: fetchError } = await query;
+      const { data, error } = await query;
+      if (error) throw error;
+      return (data as unknown as Product[]) || [];
+    },
+  });
 
-      if (fetchError) throw fetchError;
-      setProducts((data as unknown as Product[]) || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch products');
-    } finally {
-      setLoading(false);
-    }
-  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.includeCategory, options.isBestSeller, options.isOnSale, options.limit, options.offset, options.sortBy, options.language]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
-
-  return { products, loading, error, refetch: fetchProducts };
+  return { products, loading, error: error?.message ?? null, refetch };
 }
 
 // Hook for paginated products with Load More functionality
@@ -111,151 +116,87 @@ interface UsePaginatedProductsOptions {
 }
 
 export function usePaginatedProducts(options: UsePaginatedProductsOptions = {}) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [totalCount, setTotalCount] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
   const pageSize = options.pageSize || 12;
 
-  const fetchProducts = useCallback(async (offset: number = 0, append: boolean = false) => {
-    try {
-      if (append) {
-        setLoadingMore(true);
-      } else {
-        setLoading(true);
-        setProducts([]);
-      }
-      setError(null);
+  const queryKey = [
+    'products-paginated',
+    options.categoryId,
+    options.categoryIds,
+    options.status,
+    options.sortBy,
+    options.language,
+    pageSize,
+  ];
 
+  const {
+    data,
+    isLoading: loading,
+    isFetchingNextPage: loadingMore,
+    error,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey,
+    queryFn: async ({ pageParam = 0 }) => {
       let query = supabase
         .from('products')
-        .select('*, category:categories(*)', { count: 'exact' });
+        .select('id,title_mk,title_en,description_mk,description_en,price,sale_price,image_url,status,is_best_seller,is_on_sale,category_id,created_at,category:categories(id,name_mk,name_en,slug)');
 
-      // Apply sorting
-      switch (options.sortBy) {
-        case 'on_sale':
-          query = query.order('is_on_sale', { ascending: false, nullsFirst: false })
-            .order('created_at', { ascending: false });
-          break;
-        case 'price_asc':
-          query = query.order('price', { ascending: true });
-          break;
-        case 'price_desc':
-          query = query.order('price', { ascending: false });
-          break;
-        case 'name':
-          query = query.order(options.language === 'mk' ? 'title_mk' : 'title_en', { ascending: true });
-          break;
-        case 'newest':
-        default:
-          query = query.order('created_at', { ascending: false });
-          break;
-      }
+      query = applyProductSort(query, options.sortBy, options.language);
+      query = applyProductFilters(query, options);
 
-      if (options.categoryId) {
-        query = query.eq('category_id', options.categoryId);
-      }
+      // Fetch pageSize + 1 to determine hasMore
+      query = query.range(pageParam, pageParam + pageSize);
 
-      if (options.categoryIds?.length) {
-        query = query.in('category_id', options.categoryIds);
-      }
+      const { data, error } = await query;
+      if (error) throw error;
 
-      if (options.status) {
-        if (Array.isArray(options.status)) {
-          query = query.in('status', options.status);
-        } else {
-          query = query.eq('status', options.status);
-        }
-      }
+      const fetched = (data as unknown as Product[]) || [];
+      const hasMore = fetched.length > pageSize;
+      const items = hasMore ? fetched.slice(0, pageSize) : fetched;
 
-      query = query.range(offset, offset + pageSize - 1);
+      return { items, nextOffset: hasMore ? pageParam + pageSize : undefined };
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextOffset,
+  });
 
-      const { data, error: fetchError, count } = await query;
-
-      if (fetchError) throw fetchError;
-
-      const newProducts = (data as unknown as Product[]) || [];
-
-      if (append) {
-        setProducts((prev) => [...prev, ...newProducts]);
-      } else {
-        setProducts(newProducts);
-      }
-
-      setTotalCount(count || 0);
-      setHasMore(offset + newProducts.length < (count || 0));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch products');
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  }, [options.categoryId, JSON.stringify(options.categoryIds), JSON.stringify(options.status), options.sortBy, pageSize, options.language]);
+  const products = data?.pages.flatMap((p) => p.items) ?? [];
 
   const loadMore = useCallback(() => {
-    if (!loadingMore && hasMore) {
-      fetchProducts(products.length, true);
+    if (!loadingMore && hasNextPage) {
+      fetchNextPage();
     }
-  }, [fetchProducts, products.length, loadingMore, hasMore]);
-
-  const reset = useCallback(() => {
-    fetchProducts(0, false);
-  }, [fetchProducts]);
-
-  useEffect(() => {
-    fetchProducts(0, false);
-  }, [fetchProducts]);
+  }, [fetchNextPage, loadingMore, hasNextPage]);
 
   return {
     products,
     loading,
     loadingMore,
-    error,
-    totalCount,
-    hasMore,
+    error: error?.message ?? null,
+    totalCount: products.length + (hasNextPage ? 1 : 0),
+    hasMore: !!hasNextPage,
     loadMore,
-    reset,
+    reset: () => {},
   };
 }
 
 export function useProduct(id: string | undefined) {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: product = null, isLoading: loading, error } = useQuery({
+    queryKey: ['product', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*, category:categories(*)')
+        .eq('id', id!)
+        .single();
+      if (error) throw error;
+      return data as unknown as Product;
+    },
+    enabled: !!id,
+  });
 
-  useEffect(() => {
-    if (!id) {
-      setLoading(false);
-      return;
-    }
-
-    async function fetchProduct() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const { data, error: fetchError } = await supabase
-          .from('products')
-          .select('*, category:categories(*)')
-          .eq('id', id)
-          .single();
-
-        if (fetchError) throw fetchError;
-        setProduct(data as unknown as Product);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch product');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProduct();
-  }, [id]);
-
-  return { product, loading, error };
+  return { product, loading, error: error?.message ?? null };
 }
 
 export function useProductMutations() {

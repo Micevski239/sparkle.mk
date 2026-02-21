@@ -11,6 +11,7 @@ export default defineConfig({
           'react-vendor': ['react', 'react-dom'],
           'router': ['react-router-dom'],
           'supabase': ['@supabase/supabase-js'],
+          'query': ['@tanstack/react-query'],
         },
       },
     },

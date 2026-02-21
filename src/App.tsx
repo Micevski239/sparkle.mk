@@ -41,17 +41,11 @@ export default function App() {
     const splash = document.getElementById('splash');
     if (!splash) return;
 
-    const dismiss = () => {
+    // Dismiss splash immediately after the first React paint
+    requestAnimationFrame(() => {
       splash.style.opacity = '0';
-      setTimeout(() => splash.remove(), 800);
-    };
-
-    // Dismiss splash once the main thread is idle (or after 1s max)
-    if ('requestIdleCallback' in window) {
-      (window as Window).requestIdleCallback(dismiss, { timeout: 1000 });
-    } else {
-      setTimeout(dismiss, 100);
-    }
+      setTimeout(() => splash.remove(), 600);
+    });
   }, []);
 
   return (

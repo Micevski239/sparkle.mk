@@ -36,7 +36,7 @@ export default function Navbar({ embedded = false, showLangSwitcher = true }: Na
                     {/* Left: Language switcher on mobile, Logo on desktop */}
                     <Link to="/" className="hidden lg:flex items-center gap-3">
                         <img
-                            src="/sparkle-logo.png"
+                            src="/sparkle-logo.webp"
                             alt="Sparkle.mk logo"
                             className="h-12 md:h-14 w-auto"
                             onError={(e) => {

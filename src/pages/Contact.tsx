@@ -6,7 +6,7 @@ const INSTAGRAM_HANDLE = '_sparkle.mk';
 const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61567398783026';
 const TIKTOK_URL = 'https://www.tiktok.com/@_sparkle.mk';
 const CTA_BUTTON_CLASS =
-  'mt-auto w-full max-w-[220px] mx-auto inline-flex items-center justify-center gap-2 h-16 px-6 text-white text-sm tracking-wide text-center leading-tight hover:opacity-80 transition-all';
+  'mt-auto w-full max-w-[220px] mx-auto inline-flex items-center justify-center gap-2 h-16 px-6 text-white text-sm tracking-wide text-center leading-tight hover:opacity-80 transition-opacity';
 
 export default function Contact() {
   const { language, t } = useLanguage();

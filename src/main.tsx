@@ -1,30 +1,30 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LanguageProvider } from './context/LanguageContext';
 import App from './App';
 import './index.css';
 
-const GA_MEASUREMENT_ID = 'G-FSKHSFMK61';
-
-declare global {
-  interface Window {
-    dataLayer: unknown[];
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
-window.dataLayer = window.dataLayer || [];
-window.gtag = window.gtag || ((...args: unknown[]) => window.dataLayer.push(args));
-window.gtag('js', new Date());
-window.gtag('config', GA_MEASUREMENT_ID);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <LanguageProvider>
-        <App />
-      </LanguageProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <LanguageProvider>
+          <App />
+        </LanguageProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   </StrictMode>
 );

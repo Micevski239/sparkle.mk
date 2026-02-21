@@ -1,71 +1,42 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { validateImageFile } from '../lib/utils';
 import { HomepageHeroSlide, HomepageGridImage, WelcomeTile } from '../types';
 
-// Public hooks for frontend
+// Public hooks for frontend — powered by TanStack Query for caching & dedup
 export function useHomepageHeroSlides() {
-    const [slides, setSlides] = useState<HomepageHeroSlide[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: slides = [], isLoading: loading, error } = useQuery({
+        queryKey: ['homepage-hero-slides'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('homepage_hero_slides')
+                .select('id,image_url,headline_text_mk,headline_text_en,button_text_mk,button_text_en,button_link,order_index')
+                .eq('is_active', true)
+                .order('order_index', { ascending: true });
+            if (error) throw error;
+            return (data as unknown as HomepageHeroSlide[]) || [];
+        },
+    });
 
-    useEffect(() => {
-        async function fetchSlides() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('homepage_hero_slides')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('order_index', { ascending: true });
-
-                if (fetchError) throw fetchError;
-                setSlides((data as unknown as HomepageHeroSlide[]) || []);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch hero slides');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchSlides();
-    }, []);
-
-    return { slides, loading, error };
+    return { slides, loading, error: error?.message ?? null };
 }
 
 export function useHomepageGridImages() {
-    const [images, setImages] = useState<HomepageGridImage[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: images = [], isLoading: loading, error } = useQuery({
+        queryKey: ['homepage-grid-images'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('homepage_grid_images')
+                .select('id,image_url,link_url,order_index,is_featured')
+                .eq('is_active', true)
+                .order('order_index', { ascending: true });
+            if (error) throw error;
+            return (data as unknown as HomepageGridImage[]) || [];
+        },
+    });
 
-    useEffect(() => {
-        async function fetchImages() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('homepage_grid_images')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('order_index', { ascending: true });
-
-                if (fetchError) throw fetchError;
-                setImages((data as unknown as HomepageGridImage[]) || []);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch grid images');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchImages();
-    }, []);
-
-    return { images, loading, error };
+    return { images, loading, error: error?.message ?? null };
 }
 
 // Admin hooks for managing content
@@ -365,35 +336,20 @@ export function useGridImageMutations() {
 
 // Public hook for welcome tiles
 export function useWelcomeTiles() {
-    const [tiles, setTiles] = useState<WelcomeTile[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: tiles = [], isLoading: loading, error } = useQuery({
+        queryKey: ['welcome-tiles'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('welcome_tiles')
+                .select('id,label_en,label_mk,image_url,bg_color,link_url,display_order')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+            if (error) throw error;
+            return (data as unknown as WelcomeTile[]) || [];
+        },
+    });
 
-    useEffect(() => {
-        async function fetchTiles() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('welcome_tiles')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('display_order', { ascending: true });
-
-                if (fetchError) throw fetchError;
-                setTiles((data as unknown as WelcomeTile[]) || []);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch welcome tiles');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchTiles();
-    }, []);
-
-    return { tiles, loading, error };
+    return { tiles, loading, error: error?.message ?? null };
 }
 
 // Admin hook for welcome tiles

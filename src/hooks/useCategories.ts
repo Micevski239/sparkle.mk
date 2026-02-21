@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { Category } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -41,49 +42,30 @@ export function buildCategoryTree(categories: Category[]): Category[] {
 
 export function useCategories() {
   const { language } = useLanguage();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchCategories = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const { data, error: fetchError } = await supabase
+  const { data: categories = [], isLoading: loading, error, refetch } = useQuery({
+    queryKey: ['categories', language],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from('categories')
         .select('*')
         .order('display_order', { ascending: true })
         .order(language === 'mk' ? 'name_mk' : 'name_en', { ascending: true });
+      if (error) throw error;
+      return (data as Category[]) || [];
+    },
+  });
 
-      if (fetchError) throw fetchError;
-      setCategories(data || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch categories');
-    } finally {
-      setLoading(false);
-    }
-  }, [language]);
-
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
-
-  return { categories, loading, error, refetch: fetchCategories };
+  return { categories, loading, error: error?.message ?? null, refetch };
 }
 
 // Hook to get categories with product counts and tree structure
 export function useCategoriesWithCounts() {
   const { language } = useLanguage();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchCategoriesWithCounts = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
+  const { data: categories = [], isLoading: loading, error, refetch } = useQuery({
+    queryKey: ['categories-with-counts', language],
+    queryFn: async () => {
       // Fetch categories
       const { data: categoriesData, error: catError } = await supabase
         .from('categories')
@@ -110,22 +92,12 @@ export function useCategoriesWithCounts() {
       });
 
       // Add counts to categories
-      const categoriesWithCounts = (categoriesData || []).map((cat) => ({
+      return (categoriesData || []).map((cat) => ({
         ...cat,
         productCount: countMap.get(cat.id) || 0,
-      }));
-
-      setCategories(categoriesWithCounts);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch categories');
-    } finally {
-      setLoading(false);
-    }
-  }, [language]);
-
-  useEffect(() => {
-    fetchCategoriesWithCounts();
-  }, [fetchCategoriesWithCounts]);
+      })) as Category[];
+    },
+  });
 
   // Build tree from flat list
   const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
@@ -145,8 +117,8 @@ export function useCategoriesWithCounts() {
     categories,
     categoryTree,
     loading,
-    error,
-    refetch: fetchCategoriesWithCounts,
+    error: error?.message ?? null,
+    refetch,
     getTotalCount,
   };
 }

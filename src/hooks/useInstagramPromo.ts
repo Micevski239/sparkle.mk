@@ -1,39 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { InstagramPromo } from '../types';
 
 // Public hook - fetches the single active record
 export function useInstagramPromo() {
-    const [promo, setPromo] = useState<InstagramPromo | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: promo = null, isLoading: loading, error } = useQuery({
+        queryKey: ['instagram-promo'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('instagram_promo')
+                .select('*')
+                .eq('is_active', true)
+                .limit(1)
+                .single();
+            if (error) throw error;
+            return (data as unknown as InstagramPromo) ?? null;
+        },
+    });
 
-    useEffect(() => {
-        async function fetchPromo() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('instagram_promo')
-                    .select('*')
-                    .eq('is_active', true)
-                    .limit(1)
-                    .single();
-
-                if (fetchError) throw fetchError;
-                setPromo(data as unknown as InstagramPromo);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch instagram promo');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchPromo();
-    }, []);
-
-    return { promo, loading, error };
+    return { promo, loading, error: error?.message ?? null };
 }
 
 // Admin hook - fetches the single record with refetch

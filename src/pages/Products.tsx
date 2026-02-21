@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -117,7 +117,7 @@ export default function Products() {
   }, [viewMode]);
 
   // Update URL when state changes
-  const updateParams = useCallback((updates: Record<string, string | null>) => {
+  const updateParams = useCallback((updates: Record<string, string | null>, replace = false) => {
     const newParams = new URLSearchParams(searchParams);
 
     Object.entries(updates).forEach(([key, value]) => {
@@ -128,7 +128,7 @@ export default function Products() {
       }
     });
 
-    setSearchParams(newParams);
+    setSearchParams(newParams, { replace });
   }, [searchParams, setSearchParams]);
 
   const handleCategoryChange = (categoryId: string | null) => {
@@ -143,9 +143,14 @@ export default function Products() {
     updateParams({ sort: sort === 'on_sale' ? null : sort });
   };
 
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    updateParams({ search: value || null });
+    clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      updateParams({ search: value || null }, true);
+    }, 300);
   };
 
   // Find selected category by slug from URL

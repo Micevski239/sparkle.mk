@@ -145,7 +145,7 @@ export default function TestimonialsSection() {
         ? testimonials
         : defaultTestimonials.map((t, i) => ({ ...t, id: `default-${i}` }));
 
-    // Duplicate for seamless loop
+    // Duplicate for seamless loop (desktop marquee only)
     const duplicatedTestimonials = [...displayTestimonials, ...displayTestimonials];
 
     const animationStyle = useMemo(() => {

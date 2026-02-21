@@ -1,39 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { validateImageFile } from '../lib/utils';
 import { Testimonial } from '../types';
 
 // Public hook for frontend - fetches active testimonials
 export function useTestimonials() {
-    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: testimonials = [], isLoading: loading, error } = useQuery({
+        queryKey: ['testimonials'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('testimonials')
+                .select('id,customer_name,customer_photo_url,customer_location_en,customer_location_mk,quote_en,quote_mk,rating,display_order')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+            if (error) throw error;
+            return (data as unknown as Testimonial[]) || [];
+        },
+    });
 
-    useEffect(() => {
-        async function fetchTestimonials() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data, error: fetchError } = await supabase
-                    .from('testimonials')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('display_order', { ascending: true });
-
-                if (fetchError) throw fetchError;
-                setTestimonials((data as unknown as Testimonial[]) || []);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch testimonials');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchTestimonials();
-    }, []);
-
-    return { testimonials, loading, error };
+    return { testimonials, loading, error: error?.message ?? null };
 }
 
 // Admin hook - fetches all testimonials with refetch capability

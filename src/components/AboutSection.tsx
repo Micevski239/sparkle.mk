@@ -151,7 +151,7 @@ export default function AboutSection() {
                         </p>
                         <Link
                             to="/about"
-                            className="inline-flex items-center px-6 py-3 border border-gray-900 text-gray-900 text-sm tracking-wider uppercase hover:bg-gray-900 hover:text-white transition-all"
+                            className="inline-flex items-center px-6 py-3 border border-gray-900 text-gray-900 text-sm tracking-wider uppercase hover:bg-gray-900 hover:text-white transition-colors"
                         >
                             {language === 'mk' ? 'Повеќе за нас' : 'Learn More'}
                         </Link>
@@ -186,7 +186,7 @@ export default function AboutSection() {
                     </blockquote>
                     <div className="flex flex-col items-center">
                         <span className="text-gray-600">
-                            — {quoteContent.founder_name || defaultContent.quote.founder_name}, {language === 'mk' ? 'Основач' : 'Founder'}
+                            - {quoteContent.founder_name || defaultContent.quote.founder_name}, {language === 'mk' ? 'Основач' : 'Founder'}
                         </span>
                         {quoteContent.signature_url && (
                             <img

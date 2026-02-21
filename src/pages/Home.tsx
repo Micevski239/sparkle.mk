@@ -5,9 +5,12 @@ import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
 import { formatPrice } from '../lib/utils';
 
-function FadeInSection({ children }: { children: ReactNode }) {
+/** Defers mounting of children until the placeholder enters viewport.
+ *  This prevents below-fold sections from fetching data and loading
+ *  chunks on initial page load. Once mounted, fades in with opacity. */
+function DeferredSection({ children, minHeight = 'py-16' }: { children: ReactNode; minHeight?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -15,11 +18,11 @@ function FadeInSection({ children }: { children: ReactNode }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
+          setMounted(true);
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1 }
+      { rootMargin: '200px' }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -29,10 +32,10 @@ function FadeInSection({ children }: { children: ReactNode }) {
     <div
       ref={ref}
       className={`transition-opacity duration-700 ease-out ${
-        visible ? 'opacity-100' : 'opacity-0'
+        mounted ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      {children}
+      {mounted ? children : <div className={minHeight} />}
     </div>
   );
 }
@@ -224,34 +227,34 @@ export default function Home() {
       {/* ============================================
           WELCOME SECTION + CATEGORY TILES
           ============================================ */}
-      <FadeInSection>
+      <DeferredSection>
         <Suspense fallback={<div className="py-16" />}>
           <WelcomeSection />
         </Suspense>
-      </FadeInSection>
+      </DeferredSection>
 
       {/* ============================================
           INSTAGRAM PROMO SECTION
           ============================================ */}
-      <FadeInSection>
+      <DeferredSection>
         <Suspense fallback={<div className="py-16" />}>
           <InstagramPromoSection />
         </Suspense>
-      </FadeInSection>
+      </DeferredSection>
 
       {/* ============================================
           TESTIMONIALS SECTION
           ============================================ */}
-      <FadeInSection>
+      <DeferredSection>
         <Suspense fallback={<div className="py-16" />}>
           <TestimonialsSection />
         </Suspense>
-      </FadeInSection>
+      </DeferredSection>
 
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
-      <FadeInSection>
+      <DeferredSection>
       <section className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -341,16 +344,16 @@ export default function Home() {
           )}
         </div>
       </section>
-      </FadeInSection>
+      </DeferredSection>
 
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <FadeInSection>
+      <DeferredSection>
         <Suspense fallback={<div className="py-20" />}>
           <AboutSection />
         </Suspense>
-      </FadeInSection>
+      </DeferredSection>
 
     </div>
   );
