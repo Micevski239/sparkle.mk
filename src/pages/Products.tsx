@@ -97,6 +97,19 @@ export default function Products() {
     return categories.reduce((sum, cat) => sum + (cat.productCount || 0), 0);
   }, [categories]);
 
+  // Total count for the selected category (or all)
+  const displayTotalCount = useMemo(() => {
+    if (!selectedCategory) return totalProducts;
+    const findCat = (cats: Category[]): Category | undefined => {
+      for (const c of cats) {
+        if (c.id === selectedCategory) return c;
+        if (c.subcategories) { const f = findCat(c.subcategories); if (f) return f; }
+      }
+    };
+    const cat = findCat(categoryTree);
+    return cat ? getTotalCount(cat) : totalProducts;
+  }, [selectedCategory, categoryTree, getTotalCount, totalProducts]);
+
   // Sync URL params with state
   useEffect(() => {
     setSelectedCategory(categoryParam);
@@ -267,7 +280,7 @@ export default function Products() {
           <div className="flex-1 min-w-0">
             {/* Grid controls */}
             <ProductGridControls
-              totalCount={searchQuery ? filteredProducts.length : products.length}
+              totalCount={searchQuery ? filteredProducts.length : displayTotalCount}
               sortBy={sortBy}
               onSortChange={handleSortChange}
               viewMode={viewMode}

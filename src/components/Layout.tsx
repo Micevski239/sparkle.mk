@@ -268,7 +268,9 @@ export default function Layout() {
         <Suspense fallback={null}>
           <ScatteredOrnaments />
         </Suspense>
-        <Outlet />
+        <div className="relative z-[1]">
+          <Outlet />
+        </div>
       </main>
 
       {/* Footer */}
