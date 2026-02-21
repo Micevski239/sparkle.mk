@@ -300,36 +300,7 @@ export default function Layout() {
                 {t.about.missionText}
               </p>
 
-              {/* Social */}
-              <div className="mt-6 flex flex-col gap-3">
-                <a
-                  href="https://instagram.com/_sparkle.mk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
-                >
-                  <InstagramIcon />
-                  <span className="text-sm">Instagram</span>
-                </a>
-                <a
-                  href="https://www.facebook.com/profile.php?id=61567398783026"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
-                >
-                  <FacebookIcon />
-                  <span className="text-sm">Facebook</span>
-                </a>
-                <a
-                  href="https://www.tiktok.com/@_sparkle.mk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
-                >
-                  <TikTokIcon />
-                  <span className="text-sm">TikTok</span>
-                </a>
-              </div>
+             
             </div>
 
             {/* Quick Links */}
