@@ -23,7 +23,10 @@ export default function InstagramPromoSection() {
 
     useEffect(() => {
         if (!inView) return;
-        if (document.getElementById('EmbedSocialHashtagScript')) return;
+
+        // If the script already exists, remove it so it re-executes on re-mount
+        const existing = document.getElementById('EmbedSocialHashtagScript');
+        if (existing) existing.remove();
 
         const script = document.createElement('script');
         script.id = 'EmbedSocialHashtagScript';
