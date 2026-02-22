@@ -1,5 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
-import { useFadeIn } from '../hooks/useFadeIn';
+import { useScrollReveal } from '../hooks/useFadeIn';
 import { InstagramIcon, FacebookIcon, TikTokIcon } from '../components/icons';
 
 const INSTAGRAM_HANDLE = '_sparkle.mk';
@@ -10,10 +10,10 @@ const CTA_BUTTON_CLASS =
 
 export default function Contact() {
   const { language, t } = useLanguage();
-  const fadeIn = useFadeIn();
+  const fadeIn = useScrollReveal();
 
   return (
-    <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>
+    <div ref={fadeIn.ref} style={fadeIn.style} className="min-h-screen">
       <div className="max-w-4xl mx-auto px-6 py-16 md:py-24">
         {/* Header */}
         <div className="text-center mb-16">

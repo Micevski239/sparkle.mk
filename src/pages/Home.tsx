@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
+import { useScrollReveal } from '../hooks/useFadeIn';
 import { formatPrice } from '../lib/utils';
 
 const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
@@ -12,6 +13,14 @@ const AboutSection = lazy(() => import('../components/AboutSection'));
 
 export default function Home() {
   const { language } = useLanguage();
+
+  // Scroll reveal animations for each section
+  const heroReveal = useScrollReveal();
+  const welcomeReveal = useScrollReveal();
+  const instagramReveal = useScrollReveal();
+  const testimonialsReveal = useScrollReveal();
+  const featuredReveal = useScrollReveal();
+  const aboutReveal = useScrollReveal();
 
   // Fetch published products (best sellers will be sorted first via the query)
   const { products, loading: productsLoading } = useProducts({
@@ -72,7 +81,7 @@ export default function Home() {
           HERO SECTION - 3 Image Cards (Dynamic from Supabase)
           Left: 1 big card | Right: 2 stacked cards
           ============================================ */}
-      <section>
+      <section ref={heroReveal.ref} style={heroReveal.style}>
         <div className="px-4 sm:px-6 lg:px-[72px] py-4 md:py-8">
           {slidesLoading ? (
             // Loading skeleton
@@ -199,28 +208,34 @@ export default function Home() {
       {/* ============================================
           WELCOME SECTION + CATEGORY TILES
           ============================================ */}
-      <Suspense fallback={<div className="py-16" />}>
+      <div ref={welcomeReveal.ref} style={welcomeReveal.style}>
+        <Suspense fallback={<div className="py-16" />}>
           <WelcomeSection />
         </Suspense>
+      </div>
 
       {/* ============================================
           INSTAGRAM PROMO SECTION
           ============================================ */}
-      <Suspense fallback={<div className="py-16" />}>
+      <div ref={instagramReveal.ref} style={instagramReveal.style}>
+        <Suspense fallback={<div className="py-16" />}>
           <InstagramPromoSection />
         </Suspense>
+      </div>
 
       {/* ============================================
           TESTIMONIALS SECTION
           ============================================ */}
-      <Suspense fallback={<div className="py-16" />}>
+      <div ref={testimonialsReveal.ref} style={testimonialsReveal.style}>
+        <Suspense fallback={<div className="py-16" />}>
           <TestimonialsSection />
         </Suspense>
+      </div>
 
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
-      <section className="py-12 md:py-16 px-6">
+      <section ref={featuredReveal.ref} style={featuredReveal.style} className="py-12 md:py-16 px-6">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="flex flex-col items-center text-center mb-10">
@@ -313,9 +328,11 @@ export default function Home() {
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <Suspense fallback={<div className="py-20" />}>
+      <div ref={aboutReveal.ref} style={aboutReveal.style}>
+        <Suspense fallback={<div className="py-20" />}>
           <AboutSection />
         </Suspense>
+      </div>
 
     </div>
   );

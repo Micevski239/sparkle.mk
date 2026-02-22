@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { useFadeIn } from '../hooks/useFadeIn';
+import { useScrollReveal } from '../hooks/useFadeIn';
 
 const INSTAGRAM_URL = 'https://instagram.com/_sparkle.mk';
 const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61567398783026';
@@ -8,7 +8,7 @@ const TIKTOK_URL = 'https://www.tiktok.com/@_sparkle.mk';
 
 export default function About() {
   const { t } = useLanguage();
-  const fadeIn = useFadeIn();
+  const fadeIn = useScrollReveal();
 
   const values = [
     {
@@ -64,7 +64,7 @@ export default function About() {
   ];
 
   return (
-    <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>
+    <div ref={fadeIn.ref} style={fadeIn.style} className="min-h-screen">
       <div className="max-w-4xl mx-auto px-6 py-16 md:py-24">
         {/* Header */}
         <div className="mb-16">

@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { useScrollReveal } from '../hooks/useFadeIn';
 
 export default function NotFound() {
   const { language } = useLanguage();
+  const reveal = useScrollReveal();
 
   return (
-    <div className="bg-white min-h-screen flex items-center justify-center px-6">
+    <div ref={reveal.ref} style={reveal.style} className="min-h-screen flex items-center justify-center px-6">
       <div className="text-center max-w-md">
         {/* 404 Number */}
         <h1 className="text-[120px] md:text-[180px] font-light text-gray-100 leading-none select-none">

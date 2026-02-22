@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useFadeIn } from '../hooks/useFadeIn';
+import { useScrollReveal } from '../hooks/useFadeIn';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProduct, useProducts } from '../hooks/useProducts';
@@ -9,7 +9,7 @@ import { InstagramIcon, FacebookIcon, TikTokIcon } from '../components/icons';
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { language, t } = useLanguage();
-  const fadeIn = useFadeIn();
+  const fadeIn = useScrollReveal();
   const { product, loading, error } = useProduct(id);
 
   // Fetch related products from the same category
@@ -58,7 +58,7 @@ export default function ProductDetail() {
   const isSold = product.status === 'sold';
 
   return (
-    <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>
+    <div ref={fadeIn.ref} style={fadeIn.style} className="min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Back link */}
         <Link

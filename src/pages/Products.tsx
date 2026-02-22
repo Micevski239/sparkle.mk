@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useFadeIn } from '../hooks/useFadeIn';
+import { useScrollReveal } from '../hooks/useFadeIn';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { usePaginatedProducts } from '../hooks/useProducts';
@@ -15,7 +15,7 @@ const VIEW_MODE_KEY = 'sparkle_products_view_mode';
 
 export default function Products() {
   const { language, t } = useLanguage();
-  const fadeIn = useFadeIn();
+  const fadeIn = useScrollReveal();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // URL parameters
@@ -210,7 +210,7 @@ export default function Products() {
   };
 
   return (
-    <div ref={fadeIn.ref} className={`bg-white min-h-screen ${fadeIn.className}`}>
+    <div ref={fadeIn.ref} style={fadeIn.style} className="min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-8">
