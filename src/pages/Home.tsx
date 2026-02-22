@@ -7,7 +7,7 @@ import { formatPrice } from '../lib/utils';
 
 const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
 const InstagramPromoSection = lazy(() => import('../components/InstagramPromoSection'));
-const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
+// const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
 const AboutSection = lazy(() => import('../components/AboutSection'));
 
 export default function Home() {
