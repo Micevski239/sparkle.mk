@@ -36,13 +36,12 @@ export default function InstagramPromoSection() {
     }, [inView]);
 
     return (
-        <section ref={containerRef} className="py-12 md:py-20 px-6 bg-white">
+        <section ref={containerRef} className="py-12 md:py-20 px-6">
             <div className="max-w-5xl mx-auto">
                 {inView ? (
                     <div
                         className="embedsocial-hashtag"
                         data-ref="5cb5f0e799a75dc479c645ee87ba49ac205fcd4c"
-                        style={{ contain: 'content' }}
                     />
                 ) : (
                     <div className="h-64 flex items-center justify-center">

@@ -90,7 +90,7 @@ function TestimonialCard({ testimonial, language }: { testimonial: Omit<Testimon
     const quote = language === 'mk' ? testimonial.quote_mk : testimonial.quote_en;
 
     return (
-        <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 flex flex-col h-full min-w-[200px] sm:min-w-[280px] max-w-[320px]">
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col h-full min-w-[200px] sm:min-w-[280px] max-w-[320px]">
             <StarRating rating={testimonial.rating} />
 
             <p className="text-gray-700 mt-4 mb-6 flex-grow text-sm leading-relaxed italic">
@@ -151,11 +151,9 @@ export default function TestimonialsSection() {
     const animationStyle = useMemo(() => {
         const cardWidth = 320 + 24; // card width + gap
         const totalWidth = displayTestimonials.length * cardWidth;
-        const active = isVisible && !isPaused;
         return {
-            animation: active
-                ? `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`
-                : 'none',
+            animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
+            animationPlayState: (isPaused || !isVisible ? 'paused' : 'running') as 'paused' | 'running',
             width: 'max-content',
             '--scroll-distance': `-${totalWidth}px`,
         } as React.CSSProperties;
@@ -163,7 +161,7 @@ export default function TestimonialsSection() {
 
     if (loading) {
         return (
-            <section className="py-16 bg-white">
+            <section className="py-16">
                 <div className="w-full">
                     <div className="flex justify-center mb-10 px-6">
                         <div className="h-8 w-64 bg-gray-200 animate-pulse rounded" />
@@ -193,7 +191,7 @@ export default function TestimonialsSection() {
     }
 
     return (
-        <section ref={sectionRef} className="py-16 bg-white">
+        <section ref={sectionRef} className="py-16">
             <div className="w-full">
                 {/* Section Header */}
                 <div className="flex flex-col items-center text-center mb-10 px-6">

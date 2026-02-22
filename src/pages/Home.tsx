@@ -67,12 +67,12 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white">
+    <div>
       {/* ============================================
           HERO SECTION - 3 Image Cards (Dynamic from Supabase)
           Left: 1 big card | Right: 2 stacked cards
           ============================================ */}
-      <section className="bg-white">
+      <section>
         <div className="px-4 sm:px-6 lg:px-[72px] py-4 md:py-8">
           {slidesLoading ? (
             // Loading skeleton
@@ -98,9 +98,8 @@ export default function Home() {
                     : (leftSlide?.headline_text_en || defaultSlides.left.headline_en)}
                   className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                   loading="eager"
-                  decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" style={{ contain: 'strict' }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-9 lg:p-12">
                   <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                     {language === 'mk' ? 'Нова колекција' : 'New Collection'}
@@ -136,9 +135,8 @@ export default function Home() {
                       : (topRightSlide?.headline_text_en || defaultSlides.topRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                     loading="lazy"
-                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" style={{ contain: 'strict' }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
                     <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                       {language === 'mk' ? 'Подароци' : 'Gifts'}
@@ -171,9 +169,8 @@ export default function Home() {
                       : (bottomRightSlide?.headline_text_en || defaultSlides.bottomRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                     loading="lazy"
-                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" style={{ contain: 'strict' }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
                     <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                       {language === 'mk' ? 'Декорации' : 'Decorations'}
@@ -202,35 +199,28 @@ export default function Home() {
       {/* ============================================
           WELCOME SECTION + CATEGORY TILES
           ============================================ */}
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' } as React.CSSProperties}>
-        <Suspense fallback={<div className="py-16" />}>
+      <Suspense fallback={<div className="py-16" />}>
           <WelcomeSection />
         </Suspense>
-      </div>
 
       {/* ============================================
           INSTAGRAM PROMO SECTION
           ============================================ */}
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 500px' } as React.CSSProperties}>
-        <Suspense fallback={<div className="py-16" />}>
+      <Suspense fallback={<div className="py-16" />}>
           <InstagramPromoSection />
         </Suspense>
-      </div>
 
       {/* ============================================
           TESTIMONIALS SECTION
           ============================================ */}
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' } as React.CSSProperties}>
-        <Suspense fallback={<div className="py-16" />}>
+      <Suspense fallback={<div className="py-16" />}>
           <TestimonialsSection />
         </Suspense>
-      </div>
 
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 700px' } as React.CSSProperties}>
-      <section className="py-12 md:py-16 px-6 bg-white">
+      <section className="py-12 md:py-16 px-6">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="flex flex-col items-center text-center mb-10">
@@ -319,16 +309,13 @@ export default function Home() {
           )}
         </div>
       </section>
-      </div>
 
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 800px' } as React.CSSProperties}>
-        <Suspense fallback={<div className="py-20" />}>
+      <Suspense fallback={<div className="py-20" />}>
           <AboutSection />
         </Suspense>
-      </div>
 
     </div>
   );
