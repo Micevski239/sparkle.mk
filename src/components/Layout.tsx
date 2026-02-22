@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { InstagramIcon, FacebookIcon, TikTokIcon } from './icons';
 import ScrollToTop from './ScrollToTop';
+import { usePageTracking } from '../hooks/usePageTracking';
 import { dismissSplash } from '../App';
 
 const ScatteredOrnaments = lazy(() => import('./ScatteredOrnaments'));
@@ -10,6 +11,7 @@ const ScatteredOrnaments = lazy(() => import('./ScatteredOrnaments'));
 export default function Layout() {
   const { language, setLanguage, t } = useLanguage();
   const location = useLocation();
+  usePageTracking();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);

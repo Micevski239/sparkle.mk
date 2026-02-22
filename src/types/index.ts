@@ -1,5 +1,19 @@
 export type ProductStatus = 'draft' | 'published' | 'sold';
 
+// Analytics
+export interface AnalyticsSummary {
+  views_today: number;
+  visitors_today: number;
+  views_7d: number;
+  visitors_7d: number;
+  views_30d: number;
+  visitors_30d: number;
+  views_by_day: { date: string; views: number; visitors: number }[];
+  top_pages: { page_path: string; views: number; visitors: number }[];
+  devices: { device: string; count: number }[];
+  referrers: { source: string; count: number }[];
+}
+
 export interface Category {
   id: string;
   name_mk: string;

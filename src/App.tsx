@@ -36,6 +36,7 @@ const WelcomeTiles = lazyWithRetry(() => import('./pages/admin/WelcomeTiles'), '
 const AboutSectionAdmin = lazyWithRetry(() => import('./pages/admin/AboutSection'), 'admin-about-section');
 const TestimonialsAdmin = lazyWithRetry(() => import('./pages/admin/Testimonials'), 'admin-testimonials');
 const InstagramPromoAdmin = lazyWithRetry(() => import('./pages/admin/InstagramPromo'), 'admin-instagram-promo');
+const ProductsAdmin = lazyWithRetry(() => import('./pages/admin/ProductsAdmin'), 'admin-products');
 
 /** Fade-out and remove the HTML splash overlay. Safe to call multiple times. */
 export function dismissSplash() {
@@ -81,6 +82,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/products" element={<ProductsAdmin />} />
             <Route path="/admin/products/new" element={<ProductForm />} />
             <Route path="/admin/products/:id/edit" element={<ProductForm />} />
             <Route path="/admin/categories" element={<Categories />} />
