@@ -7,7 +7,7 @@ import { formatPrice } from '../lib/utils';
 
 const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
 const InstagramPromoSection = lazy(() => import('../components/InstagramPromoSection'));
-// const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
+const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
 const AboutSection = lazy(() => import('../components/AboutSection'));
 
 export default function Home() {
@@ -215,13 +215,13 @@ export default function Home() {
       </div>
 
       {/* ============================================
-          TESTIMONIALS SECTION (temporarily disabled for perf testing)
+          TESTIMONIALS SECTION
           ============================================ */}
-      {/* <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' } as React.CSSProperties}>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' } as React.CSSProperties}>
         <Suspense fallback={<div className="py-16" />}>
           <TestimonialsSection />
         </Suspense>
-      </div> */}
+      </div>
 
       {/* ============================================
           FEATURED PRODUCTS
