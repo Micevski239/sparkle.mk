@@ -215,13 +215,13 @@ export default function Home() {
       </div>
 
       {/* ============================================
-          TESTIMONIALS SECTION
+          TESTIMONIALS SECTION (temporarily disabled for perf testing)
           ============================================ */}
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' } as React.CSSProperties}>
+      {/* <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' } as React.CSSProperties}>
         <Suspense fallback={<div className="py-16" />}>
           <TestimonialsSection />
         </Suspense>
-      </div>
+      </div> */}
 
       {/* ============================================
           FEATURED PRODUCTS
