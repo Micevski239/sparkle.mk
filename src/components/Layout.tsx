@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { InstagramIcon, FacebookIcon, TikTokIcon } from './icons';
 import ScrollToTop from './ScrollToTop';
+import { dismissSplash } from '../App';
 
 const ScatteredOrnaments = lazy(() => import('./ScatteredOrnaments'));
 
@@ -50,6 +51,13 @@ export default function Layout() {
 
   useEffect(() => {
     setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // On non-home pages, dismiss the splash immediately on mount
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      dismissSplash();
+    }
   }, [location.pathname]);
 
   const navLinks = [

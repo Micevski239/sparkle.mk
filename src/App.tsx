@@ -36,23 +36,32 @@ const AboutSectionAdmin = lazyWithRetry(() => import('./pages/admin/AboutSection
 const TestimonialsAdmin = lazyWithRetry(() => import('./pages/admin/Testimonials'), 'admin-testimonials');
 const InstagramPromoAdmin = lazyWithRetry(() => import('./pages/admin/InstagramPromo'), 'admin-instagram-promo');
 
+/** Fade-out and remove the HTML splash overlay. Safe to call multiple times. */
+export function dismissSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash || splash.dataset.dismissing) return;
+  splash.dataset.dismissing = '1';
+  splash.style.opacity = '0';
+  setTimeout(() => splash.remove(), 600);
+}
+
 export default function App() {
   useEffect(() => {
-    const splash = document.getElementById('splash');
-    if (!splash) return;
-
-    // Dismiss splash immediately after the first React paint
-    requestAnimationFrame(() => {
-      splash.style.opacity = '0';
-      setTimeout(() => splash.remove(), 600);
-    });
+    // Fallback: if no page signals readiness within 4s, dismiss anyway
+    const fallback = setTimeout(dismissSplash, 4000);
+    const handler = () => { clearTimeout(fallback); dismissSplash(); };
+    window.addEventListener('app:content-ready', handler, { once: true });
+    return () => {
+      clearTimeout(fallback);
+      window.removeEventListener('app:content-ready', handler);
+    };
   }, []);
 
   return (
     <ErrorBoundary>
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <img src="/sparkle-logo.png" alt="" width="64" height="64" className="animate-pulse" />
       </div>
     }>
     <Routes>

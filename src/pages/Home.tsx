@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProducts } from '../hooks/useProducts';
@@ -20,6 +20,13 @@ export default function Home() {
   });
 
   const { slides, loading: slidesLoading } = useHomepageHeroSlides();
+
+  // Dismiss the splash overlay once hero data is ready
+  useEffect(() => {
+    if (!slidesLoading && !productsLoading) {
+      window.dispatchEvent(new Event('app:content-ready'));
+    }
+  }, [slidesLoading, productsLoading]);
 
   // Sort: best sellers first, then take first 4
   const featuredProducts = [...products]

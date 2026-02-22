@@ -6,8 +6,8 @@ export default function ProtectedRoute() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dark-green"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <img src="/sparkle-logo.png" alt="" width="64" height="64" className="animate-pulse" />
       </div>
     );
   }
