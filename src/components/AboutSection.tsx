@@ -91,6 +91,7 @@ export default function AboutSection() {
                                         : (galleryImages[0]?.alt_en || 'Crafting process')}
                                     className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
+                                    decoding="async"
                                 />
                             </div>
 
@@ -103,6 +104,7 @@ export default function AboutSection() {
                                         : (galleryImages[1]?.alt_en || 'Natural materials')}
                                     className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
+                                    decoding="async"
                                 />
                             </div>
 
@@ -115,6 +117,7 @@ export default function AboutSection() {
                                         : (galleryImages[2]?.alt_en || 'Finished products')}
                                     className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
+                                    decoding="async"
                                 />
                             </div>
 
@@ -127,6 +130,7 @@ export default function AboutSection() {
                                         : (galleryImages[3]?.alt_en || 'Packaging with care')}
                                     className="w-full h-full object-cover md:hover:scale-105 md:transition-transform md:duration-700"
                                     loading="lazy"
+                                    decoding="async"
                                 />
                             </div>
                         </div>

@@ -98,8 +98,9 @@ export default function Home() {
                     : (leftSlide?.headline_text_en || defaultSlides.left.headline_en)}
                   className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                   loading="eager"
+                  decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" style={{ contain: 'strict' }} />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-9 lg:p-12">
                   <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                     {language === 'mk' ? 'Нова колекција' : 'New Collection'}
@@ -135,8 +136,9 @@ export default function Home() {
                       : (topRightSlide?.headline_text_en || defaultSlides.topRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                     loading="lazy"
+                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" style={{ contain: 'strict' }} />
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
                     <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                       {language === 'mk' ? 'Подароци' : 'Gifts'}
@@ -169,8 +171,9 @@ export default function Home() {
                       : (bottomRightSlide?.headline_text_en || defaultSlides.bottomRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                     loading="lazy"
+                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" style={{ contain: 'strict' }} />
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
                     <p className="text-xs tracking-[0.2em] text-white/70 uppercase mb-2">
                       {language === 'mk' ? 'Декорации' : 'Decorations'}
