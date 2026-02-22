@@ -42,6 +42,7 @@ export default function InstagramPromoSection() {
                     <div
                         className="embedsocial-hashtag"
                         data-ref="5cb5f0e799a75dc479c645ee87ba49ac205fcd4c"
+                        style={{ contain: 'content' }}
                     />
                 ) : (
                     <div className="h-64 flex items-center justify-center">

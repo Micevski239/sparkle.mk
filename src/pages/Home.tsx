@@ -199,34 +199,34 @@ export default function Home() {
       {/* ============================================
           WELCOME SECTION + CATEGORY TILES
           ============================================ */}
-      <>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' } as React.CSSProperties}>
         <Suspense fallback={<div className="py-16" />}>
           <WelcomeSection />
         </Suspense>
-      </>
+      </div>
 
       {/* ============================================
           INSTAGRAM PROMO SECTION
           ============================================ */}
-      <>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 500px' } as React.CSSProperties}>
         <Suspense fallback={<div className="py-16" />}>
           <InstagramPromoSection />
         </Suspense>
-      </>
+      </div>
 
       {/* ============================================
           TESTIMONIALS SECTION
           ============================================ */}
-      <>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' } as React.CSSProperties}>
         <Suspense fallback={<div className="py-16" />}>
           <TestimonialsSection />
         </Suspense>
-      </>
+      </div>
 
       {/* ============================================
           FEATURED PRODUCTS
           ============================================ */}
-      <>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 700px' } as React.CSSProperties}>
       <section className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -316,16 +316,16 @@ export default function Home() {
           )}
         </div>
       </section>
-      </>
+      </div>
 
       {/* ============================================
           ABOUT SECTION
           ============================================ */}
-      <>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 800px' } as React.CSSProperties}>
         <Suspense fallback={<div className="py-20" />}>
           <AboutSection />
         </Suspense>
-      </>
+      </div>
 
     </div>
   );

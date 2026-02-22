@@ -155,6 +155,7 @@ export default function TestimonialsSection() {
             animation: `testimonial-scroll ${displayTestimonials.length * 8}s linear infinite`,
             animationPlayState: (isPaused || !isVisible ? 'paused' : 'running') as 'paused' | 'running',
             width: 'max-content',
+            willChange: 'transform',
             '--scroll-distance': `-${totalWidth}px`,
         } as React.CSSProperties;
     }, [displayTestimonials.length, isPaused, isVisible]);
