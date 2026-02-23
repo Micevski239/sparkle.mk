@@ -374,7 +374,8 @@ export default function Layout() {
           {/* Bottom bar */}
           <div className="mt-12 pt-8 border-t border-white/20 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-white/60">
-              © {new Date().getFullYear()} sparkle.mk. {t.footer.rights}
+              © 2026 Sparkle.mk. All rights reserved. · Built by{' '}
+              <a href="https://www.godevlabagency.com" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">GoDevLab</a>
             </p>
           
           </div>
