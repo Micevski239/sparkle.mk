@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
@@ -103,6 +104,7 @@ export default function App() {
     </Routes>
     </Suspense>
     <Analytics />
+    <SpeedInsights />
     </ErrorBoundary>
   );
 }
