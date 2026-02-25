@@ -107,6 +107,7 @@ export default function Home() {
                     : (leftSlide?.headline_text_en || defaultSlides.left.headline_en)}
                   className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
                   loading="eager"
+                  fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-9 lg:p-12">
@@ -143,7 +144,7 @@ export default function Home() {
                       ? (topRightSlide?.headline_text_mk || defaultSlides.topRight.headline_mk)
                       : (topRightSlide?.headline_text_en || defaultSlides.topRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
-                    loading="lazy"
+                    loading="eager"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">
@@ -177,7 +178,7 @@ export default function Home() {
                       ? (bottomRightSlide?.headline_text_mk || defaultSlides.bottomRight.headline_mk)
                       : (bottomRightSlide?.headline_text_en || defaultSlides.bottomRight.headline_en)}
                     className="absolute inset-0 w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-700"
-                    loading="lazy"
+                    loading="eager"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-9">

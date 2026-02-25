@@ -384,7 +384,7 @@ export default function Products() {
             ) : (
               // Grid view
               <div className={getGridClass()}>
-                {filteredProducts.map((product) => {
+                {filteredProducts.map((product, index) => {
                   const isSold = product.status === 'sold';
                   return (
                     <Link key={product.id} to={`/products/${product.id}`} className="group">
@@ -396,6 +396,8 @@ export default function Products() {
                             className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
                               isSold ? 'opacity-50' : ''
                             }`}
+                            loading={index < 4 ? 'eager' : 'lazy'}
+                            fetchPriority={index < 2 ? 'high' : undefined}
                             onError={(e) => { e.currentTarget.src = product.image_url!; }}
                           />
                         ) : (

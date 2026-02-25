@@ -1,7 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
@@ -9,6 +7,8 @@ import { lazyWithRetry } from './lib/lazyWithRetry';
 
 const AdminLayout = lazy(() => import('./components/AdminLayout'));
 const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
+const Analytics = lazy(() => import('@vercel/analytics/react').then(m => ({ default: m.Analytics })));
+const SpeedInsights = lazy(() => import('@vercel/speed-insights/react').then(m => ({ default: m.SpeedInsights })));
 
 function AdminAuthWrapper() {
   return (
@@ -46,7 +46,7 @@ export function dismissSplash() {
   if (!splash || splash.dataset.dismissing) return;
   splash.dataset.dismissing = '1';
   splash.style.opacity = '0';
-  setTimeout(() => splash.remove(), 600);
+  setTimeout(() => splash.remove(), 300);
 }
 
 export default function App() {
@@ -105,8 +105,10 @@ export default function App() {
       </Route>
     </Routes>
     </Suspense>
-    <Analytics />
-    <SpeedInsights />
+    <Suspense fallback={null}>
+      <Analytics />
+      <SpeedInsights />
+    </Suspense>
     </ErrorBoundary>
   );
 }
