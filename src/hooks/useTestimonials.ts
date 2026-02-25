@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
-import { validateImageFile } from '../lib/utils';
+import { validateImageFile, compressImage, STORAGE_CACHE_OPTIONS } from '../lib/utils';
 import { Testimonial } from '../types';
 
 // Public hook for frontend - fetches active testimonials
@@ -136,13 +136,14 @@ export function useTestimonialMutations() {
             setLoading(true);
             setError(null);
 
-            const fileExt = file.name.split('.').pop();
+            const compressed = await compressImage(file, 400);
+            const fileExt = compressed.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
             const filePath = `testimonials/${fileName}`;
 
             const { error: uploadError } = await supabase.storage
                 .from('product-images')
-                .upload(filePath, file);
+                .upload(filePath, compressed, STORAGE_CACHE_OPTIONS);
 
             if (uploadError) throw uploadError;
 

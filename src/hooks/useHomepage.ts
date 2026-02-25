@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
-import { validateImageFile } from '../lib/utils';
+import { validateImageFile, compressImage, STORAGE_CACHE_OPTIONS } from '../lib/utils';
 import { HomepageHeroSlide, HomepageGridImage, WelcomeTile } from '../types';
 
 // Public hooks for frontend — powered by TanStack Query for caching & dedup
@@ -184,13 +184,14 @@ export function useHeroSlideMutations() {
             setLoading(true);
             setError(null);
 
-            const fileExt = file.name.split('.').pop();
+            const compressed = await compressImage(file, 1600);
+            const fileExt = compressed.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
             const filePath = `homepage/${fileName}`;
 
             const { error: uploadError } = await supabase.storage
                 .from('product-images')
-                .upload(filePath, file);
+                .upload(filePath, compressed, STORAGE_CACHE_OPTIONS);
 
             if (uploadError) throw uploadError;
 
@@ -300,15 +301,22 @@ export function useGridImageMutations() {
             setLoading(true);
             setError(null);
 
-            const fileExt = file.name.split('.').pop();
+            const [compressed, thumbnail] = await Promise.all([
+              compressImage(file),
+              compressImage(file, 400, 0.75),
+            ]);
+            const fileExt = compressed.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
             const filePath = `homepage/${fileName}`;
+            const thumbPath = `homepage/thumb/${fileName}`;
 
-            const { error: uploadError } = await supabase.storage
-                .from('product-images')
-                .upload(filePath, file);
+            const [mainResult, thumbResult] = await Promise.all([
+              supabase.storage.from('product-images').upload(filePath, compressed, STORAGE_CACHE_OPTIONS),
+              supabase.storage.from('product-images').upload(thumbPath, thumbnail, STORAGE_CACHE_OPTIONS),
+            ]);
 
-            if (uploadError) throw uploadError;
+            if (mainResult.error) throw mainResult.error;
+            if (thumbResult.error) console.warn('Thumbnail upload failed:', thumbResult.error);
 
             const { data: { publicUrl } } = supabase.storage
                 .from('product-images')
@@ -466,13 +474,14 @@ export function useWelcomeTileMutations() {
             setLoading(true);
             setError(null);
 
-            const fileExt = file.name.split('.').pop();
+            const compressed = await compressImage(file, 600);
+            const fileExt = compressed.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
             const filePath = `welcome-tiles/${fileName}`;
 
             const { error: uploadError } = await supabase.storage
                 .from('product-images')
-                .upload(filePath, file);
+                .upload(filePath, compressed, STORAGE_CACHE_OPTIONS);
 
             if (uploadError) throw uploadError;
 

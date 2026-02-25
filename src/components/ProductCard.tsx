@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
 import { useLanguage } from '../context/LanguageContext';
-import { formatPrice } from '../lib/utils';
+import { formatPrice, getThumbnailUrl } from '../lib/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -22,10 +22,11 @@ export default memo(function ProductCard({ product }: ProductCardProps) {
       <div className="relative aspect-square overflow-hidden bg-off-white-1">
         {product.image_url ? (
           <img
-            src={product.image_url}
+            src={getThumbnailUrl(product.image_url) || product.image_url}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
+            onError={(e) => { e.currentTarget.src = product.image_url!; }}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-off-white-2">

@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useProducts } from '../hooks/useProducts';
 import { useHomepageHeroSlides } from '../hooks/useHomepage';
 import { useScrollReveal } from '../hooks/useFadeIn';
-import { formatPrice } from '../lib/utils';
+import { formatPrice, getThumbnailUrl } from '../lib/utils';
 
 const WelcomeSection = lazy(() => import('../components/WelcomeSection'));
 const InstagramPromoSection = lazy(() => import('../components/InstagramPromoSection'));
@@ -281,10 +281,11 @@ export default function Home() {
                   <div className="aspect-[3/4] bg-gray-50 mb-4 overflow-hidden relative">
                     {product.image_url ? (
                       <img
-                        src={product.image_url}
+                        src={getThumbnailUrl(product.image_url) || product.image_url}
                         alt={language === 'mk' ? product.title_mk : product.title_en}
                         className="w-full h-full object-cover md:group-hover:scale-105 md:transition-transform md:duration-500"
                         loading="lazy"
+                        onError={(e) => { e.currentTarget.src = product.image_url!; }}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">

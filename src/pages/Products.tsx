@@ -4,7 +4,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { usePaginatedProducts } from '../hooks/useProducts';
 import { useCategoriesWithCounts } from '../hooks/useCategories';
-import { formatPrice } from '../lib/utils';
+import { formatPrice, getThumbnailUrl } from '../lib/utils';
 import { SortOption, ViewMode, Category } from '../types';
 import CategorySidebar from '../components/products/CategorySidebar';
 import MobileCategoryDrawer from '../components/products/MobileCategoryDrawer';
@@ -323,11 +323,12 @@ export default function Products() {
                       <div className="w-32 h-32 flex-shrink-0 bg-gray-50 overflow-hidden relative">
                         {product.image_url ? (
                           <img
-                            src={product.image_url}
+                            src={getThumbnailUrl(product.image_url) || product.image_url}
                             alt={language === 'mk' ? product.title_mk : product.title_en}
                             className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
                               isSold ? 'opacity-50' : ''
                             }`}
+                            onError={(e) => { e.currentTarget.src = product.image_url!; }}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
@@ -390,11 +391,12 @@ export default function Products() {
                       <div className="aspect-square bg-gray-50 mb-4 overflow-hidden relative">
                         {product.image_url ? (
                           <img
-                            src={product.image_url}
+                            src={getThumbnailUrl(product.image_url) || product.image_url}
                             alt={language === 'mk' ? product.title_mk : product.title_en}
                             className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
                               isSold ? 'opacity-50' : ''
                             }`}
+                            onError={(e) => { e.currentTarget.src = product.image_url!; }}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">

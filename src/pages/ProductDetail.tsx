@@ -3,7 +3,7 @@ import { useScrollReveal } from '../hooks/useFadeIn';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProduct, useProducts } from '../hooks/useProducts';
-import { formatPrice } from '../lib/utils';
+import { formatPrice, getThumbnailUrl } from '../lib/utils';
 import { InstagramIcon, FacebookIcon, TikTokIcon } from '../components/icons';
 
 export default function ProductDetail() {
@@ -207,8 +207,9 @@ export default function ProductDetail() {
                     <div className="aspect-square bg-gray-50 mb-4 overflow-hidden relative">
                       {relatedProduct.image_url ? (
                         <img
-                          src={relatedProduct.image_url}
+                          src={getThumbnailUrl(relatedProduct.image_url) || relatedProduct.image_url}
                           alt={language === 'mk' ? relatedProduct.title_mk : relatedProduct.title_en}
+                          onError={(e) => { e.currentTarget.src = relatedProduct.image_url!; }}
                           className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
                             relatedIsSold ? 'opacity-50' : ''
                           }`}
