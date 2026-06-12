@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Category } from '../../types';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -139,7 +140,7 @@ export default function MobileCategoryDrawer({
     onClose();
   };
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <div
@@ -243,6 +244,7 @@ export default function MobileCategoryDrawer({
           )}
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
