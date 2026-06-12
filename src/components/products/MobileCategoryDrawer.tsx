@@ -182,7 +182,7 @@ export default function MobileCategoryDrawer({
           </div>
 
           {/* Categories list */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
             {/* All Categories option */}
             <button
               onClick={handleAllClick}
