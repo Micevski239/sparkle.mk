@@ -119,7 +119,7 @@ export default function ProductForm() {
       }
     }
 
-    navigate('/admin');
+    navigate('/admin/products');
   };
 
   const categoryOptions = [
@@ -331,7 +331,7 @@ export default function ProductForm() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => navigate('/admin')}
+              onClick={() => navigate('/admin/products')}
             >
               Cancel
             </Button>

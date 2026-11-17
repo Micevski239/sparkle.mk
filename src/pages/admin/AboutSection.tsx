@@ -461,7 +461,7 @@ function StatsTab() {
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <p className="text-dark-green/60 text-sm">
                     Statistics displayed in the About section on the homepage.
                 </p>
@@ -747,7 +747,7 @@ function GalleryTab() {
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <p className="text-dark-green/60 text-sm">
                     4 images for the gallery layout. Position 1 is large, 2-3 are small, and 4 is wide.
                 </p>
