@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProducts, useProductMutations } from '../../hooks/useProducts';
 import { useCategories } from '../../hooks/useCategories';
@@ -15,6 +15,20 @@ export default function ProductsAdmin() {
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  const filteredProducts = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return products.filter((p) => {
+      if (categoryFilter !== 'all' && p.category_id !== categoryFilter) return false;
+      if (!q) return true;
+      return (
+        (p.title_en || '').toLowerCase().includes(q) ||
+        (p.title_mk || '').toLowerCase().includes(q)
+      );
+    });
+  }, [products, search, categoryFilter]);
 
   const handleDeleteClick = (product: Product) => {
     setProductToDelete(product);
@@ -59,12 +73,43 @@ export default function ProductsAdmin() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h1 className="text-2xl font-bold text-dark-green">Products</h1>
         <Link to="/admin/products/new">
           <Button>+ Add Product</Button>
         </Link>
       </div>
+
+      {/* Search + category filter */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="relative flex-1">
+          <svg className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-dark-green/50 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+          </svg>
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search products..."
+            className="w-full pl-10 pr-3 py-2 bg-white border border-off-white-2 rounded-md text-dark-green focus:outline-none focus:ring-2 focus:ring-dark-green"
+          />
+        </div>
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="sm:w-56 py-2 px-3 bg-white border border-off-white-2 rounded-md text-dark-green focus:outline-none focus:ring-2 focus:ring-dark-green"
+        >
+          <option value="all">All categories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>{c.name_en}</option>
+          ))}
+        </select>
+      </div>
+      {!loading && products.length > 0 && (
+        <p className="text-sm text-dark-green/60 mb-3">
+          Showing {filteredProducts.length} of {products.length} products
+        </p>
+      )}
 
       {actionError && (
         <div className="mb-4 bg-red-1/10 border border-red-1/20 text-red-1 px-4 py-3 rounded-md text-sm flex items-center justify-between">
@@ -83,11 +128,15 @@ export default function ProductsAdmin() {
           <div className="p-8 text-center text-dark-green/60">
             <p>No products yet. Add your first product!</p>
           </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="p-8 text-center text-dark-green/60">
+            <p>No products match your search.</p>
+          </div>
         ) : (
           <>
           {/* Mobile: cards so edit/delete/status are always visible */}
           <div className="md:hidden divide-y divide-off-white-2">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <div key={product.id} className="p-3 flex gap-3">
                 <div className="w-16 h-16 shrink-0 bg-off-white-1 rounded overflow-hidden">
                   {product.image_url && (
@@ -160,7 +209,7 @@ export default function ProductsAdmin() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-off-white-2">
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <tr key={product.id} className="hover:bg-off-white-1/50">
                     <td className="px-4 py-3">
                       <div className="w-12 h-12 bg-off-white-1 rounded overflow-hidden">

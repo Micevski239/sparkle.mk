@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -31,24 +32,74 @@ export default function AdminLayout() {
     return location.pathname.startsWith(path);
   };
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  const navLinks = (
+    <ul className="space-y-1">
+      {navItems.map((item) => (
+        <li key={item.path}>
+          <Link
+            to={item.path}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-md transition-colors ${isActive(item.path)
+              ? 'bg-dark-green text-white'
+              : 'text-dark-green hover:bg-off-white-1'
+              }`}
+          >
+            <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+            </svg>
+            <span className="truncate">{item.label}</span>
+          </Link>
+        </li>
+      ))}
+      <li className="pt-2 mt-2 border-t border-off-white-2">
+        <Link
+          to="/"
+          target="_blank"
+          className="flex items-center gap-3 px-4 py-2.5 text-sm text-dark-green hover:text-red-1 transition-colors"
+        >
+          <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          View Public Site
+        </Link>
+      </li>
+    </ul>
+  );
+
   return (
     <div className="min-h-screen bg-off-white-1">
       {/* Admin Header */}
-      <header className="bg-dark-green text-white">
+      <header className="bg-dark-green text-white sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
-              <Link to="/" className="text-lg font-bold hover:text-beige transition-colors">
+          <div className="flex items-center justify-between h-14 sm:h-16 gap-3">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+              <button
+                type="button"
+                onClick={() => setMenuOpen((o) => !o)}
+                className="md:hidden -ml-2 p-2 rounded-md hover:bg-white/10"
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={menuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} />
+                </svg>
+              </button>
+              <Link to="/" className="text-lg font-bold hover:text-beige transition-colors shrink-0">
                 sparkle.mk
               </Link>
-              <span className="text-white/60">|</span>
-              <span className="text-sm text-white/80">Admin Panel</span>
+              <span className="hidden sm:inline text-white/60">|</span>
+              <span className="hidden sm:inline text-sm text-white/80 whitespace-nowrap">Admin Panel</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-white/80">{user?.email}</span>
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+              <span className="hidden md:block text-sm text-white/80 truncate max-w-[220px]">{user?.email}</span>
               <button
                 onClick={handleSignOut}
-                className="text-sm text-white/80 hover:text-white transition-colors"
+                className="text-sm text-white/80 hover:text-white transition-colors whitespace-nowrap"
               >
                 Sign Out
               </button>
@@ -57,68 +108,23 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar */}
-          <aside className="md:w-64 flex-shrink-0">
-            <nav className="bg-white rounded-lg shadow p-4">
-              <ul className="space-y-2">
-                {navItems.map((item) => (
-                  <li key={item.path}>
-                    <Link
-                      to={item.path}
-                      className={`flex items-center gap-3 px-4 py-2 rounded-md transition-colors ${isActive(item.path)
-                        ? 'bg-dark-green text-white'
-                        : 'text-dark-green hover:bg-off-white-1'
-                        }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d={item.icon}
-                        />
-                      </svg>
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+      {/* Mobile drawer */}
+      {menuOpen && (
+        <div className="md:hidden fixed inset-x-0 top-14 bottom-0 z-30">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
+          <nav className="relative bg-white shadow-lg p-3 max-h-full overflow-y-auto">{navLinks}</nav>
+        </div>
+      )}
 
-            {/* Quick link to public site */}
-            <div className="mt-4 bg-white rounded-lg shadow p-4">
-              <Link
-                to="/"
-                target="_blank"
-                className="flex items-center gap-2 text-sm text-dark-green hover:text-red-1 transition-colors"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-                View Public Site
-              </Link>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+          {/* Desktop sidebar */}
+          <aside className="hidden md:block md:w-64 shrink-0">
+            <nav className="bg-white rounded-lg shadow p-4 sticky top-24">{navLinks}</nav>
           </aside>
 
           {/* Main content */}
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             <Outlet />
           </main>
         </div>
