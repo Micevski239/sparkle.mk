@@ -16,19 +16,37 @@ export default function ProductsAdmin() {
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [selectedCats, setSelectedCats] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  const toggleCat = (id: string) =>
+    setSelectedCats((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
+
+  const matchesSearch = (p: Product, q: string) =>
+    !q ||
+    (p.title_en || '').toLowerCase().includes(q) ||
+    (p.title_mk || '').toLowerCase().includes(q);
 
   const filteredProducts = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return products.filter((p) => {
-      if (categoryFilter !== 'all' && p.category_id !== categoryFilter) return false;
-      if (!q) return true;
-      return (
-        (p.title_en || '').toLowerCase().includes(q) ||
-        (p.title_mk || '').toLowerCase().includes(q)
-      );
+    return products.filter(
+      (p) =>
+        matchesSearch(p, q) &&
+        (selectedCats.length === 0 || (p.category_id !== null && selectedCats.includes(p.category_id)))
+    );
+  }, [products, search, selectedCats]);
+
+  // Per-category counts (respecting the search text)
+  const categoryCounts = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    const counts: Record<string, number> = {};
+    products.forEach((p) => {
+      if (p.category_id && matchesSearch(p, q)) {
+        counts[p.category_id] = (counts[p.category_id] || 0) + 1;
+      }
     });
-  }, [products, search, categoryFilter]);
+    return counts;
+  }, [products, search]);
 
   const handleDeleteClick = (product: Product) => {
     setProductToDelete(product);
@@ -94,17 +112,91 @@ export default function ProductsAdmin() {
             className="w-full pl-10 pr-3 py-2 bg-white border border-off-white-2 rounded-md text-dark-green focus:outline-none focus:ring-2 focus:ring-dark-green"
           />
         </div>
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="sm:w-56 py-2 px-3 bg-white border border-off-white-2 rounded-md text-dark-green focus:outline-none focus:ring-2 focus:ring-dark-green"
-        >
-          <option value="all">All categories</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.name_en}</option>
-          ))}
-        </select>
+        <div className="relative sm:w-64">
+          <button
+            type="button"
+            onClick={() => setFilterOpen((o) => !o)}
+            aria-expanded={filterOpen}
+            className={`w-full flex items-center justify-between gap-2 py-2 px-3 bg-white border rounded-md text-dark-green transition-colors ${
+              selectedCats.length > 0 ? 'border-dark-green' : 'border-off-white-2'
+            } focus:outline-none focus:ring-2 focus:ring-dark-green`}
+          >
+            <span className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18l-7 8v6l-4 2v-8L3 4z" />
+              </svg>
+              Categories
+              {selectedCats.length > 0 && (
+                <span className="bg-dark-green text-white text-xs rounded-full px-2 py-0.5">
+                  {selectedCats.length}
+                </span>
+              )}
+            </span>
+            <svg className={`w-4 h-4 transition-transform ${filterOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {filterOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setFilterOpen(false)} />
+              <div className="absolute right-0 left-0 sm:left-auto sm:w-72 mt-2 z-20 bg-white border border-off-white-2 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-off-white-2 text-sm">
+                  <span className="font-medium text-dark-green">Filter by category</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCats([])}
+                    disabled={selectedCats.length === 0}
+                    className="text-red-1 disabled:text-dark-green/30"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <ul className="max-h-72 overflow-y-auto py-1">
+                  {categories.map((c) => {
+                    const checked = selectedCats.includes(c.id);
+                    return (
+                      <li key={c.id}>
+                        <label className={`flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-off-white-1 ${checked ? 'bg-off-white-1/60' : ''}`}>
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => toggleCat(c.id)}
+                            className="w-4 h-4 accent-dark-green rounded border-off-white-2"
+                          />
+                          <span className="flex-1 text-sm text-dark-green">{c.name_en}</span>
+                          <span className="text-xs text-dark-green/50">{categoryCounts[c.id] || 0}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="p-2 border-t border-off-white-2">
+                  <Button onClick={() => setFilterOpen(false)} className="w-full">
+                    Show {filteredProducts.length} products
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+      {selectedCats.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {selectedCats.map((id) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => toggleCat(id)}
+              className="inline-flex items-center gap-1 bg-dark-green text-white text-xs rounded-full pl-3 pr-2 py-1"
+            >
+              {categories.find((c) => c.id === id)?.name_en || '...'}
+              <span aria-hidden="true" className="text-base leading-none">&times;</span>
+              <span className="sr-only">Remove filter</span>
+            </button>
+          ))}
+        </div>
+      )}
       {!loading && products.length > 0 && (
         <p className="text-sm text-dark-green/60 mb-3">
           Showing {filteredProducts.length} of {products.length} products
