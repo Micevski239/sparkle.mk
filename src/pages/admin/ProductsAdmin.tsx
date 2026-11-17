@@ -8,7 +8,7 @@ import Modal from '../../components/ui/Modal';
 import { formatPrice } from '../../lib/utils';
 
 export default function ProductsAdmin() {
-  const { products, loading, refetch } = useProducts({ includeCategory: true, limit: 100 });
+  const { products, loading, refetch } = useProducts({ includeCategory: true, limit: 1000 });
   const { categories } = useCategories();
   const { deleteProduct, updateProduct } = useProductMutations();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -84,7 +84,58 @@ export default function ProductsAdmin() {
             <p>No products yet. Add your first product!</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          {/* Mobile: cards so edit/delete/status are always visible */}
+          <div className="md:hidden divide-y divide-off-white-2">
+            {products.map((product) => (
+              <div key={product.id} className="p-3 flex gap-3">
+                <div className="w-16 h-16 shrink-0 bg-off-white-1 rounded overflow-hidden">
+                  {product.image_url && (
+                    <img
+                      src={product.image_url}
+                      alt={product.title_en}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-dark-green leading-tight">{product.title_en}</p>
+                  <p className="text-sm text-dark-green/60 leading-tight">{product.title_mk}</p>
+                  <p className="text-xs text-dark-green/70 mt-1">
+                    {getCategoryName(product.category_id)} · {formatPrice(product.price)}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <select
+                      value={product.status}
+                      onChange={(e) =>
+                        handleStatusChange(product, e.target.value as ProductStatus)
+                      }
+                      disabled={actionLoading}
+                      className="text-sm border border-off-white-2 rounded px-2 py-1 flex-1"
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                      <option value="sold">Sold</option>
+                    </select>
+                    <Link
+                      to={`/admin/products/${product.id}/edit`}
+                      className="px-3 py-1 text-sm rounded border border-dark-green text-dark-green"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDeleteClick(product)}
+                      className="px-3 py-1 text-sm rounded border border-red-1 text-red-1"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-off-white-1">
                 <tr>
@@ -211,6 +262,7 @@ export default function ProductsAdmin() {
               </tbody>
             </table>
           </div>
+          </>
         )}
       </div>
 
